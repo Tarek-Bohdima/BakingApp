@@ -1,23 +1,22 @@
-package com.example.bakingapp;
+package com.example.bakingapp.ui.list;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bakingapp.R;
 import com.example.bakingapp.dummy.DummyContent;
+import com.example.bakingapp.ui.detail.ItemDetailActivity;
+import com.example.bakingapp.ui.detail.ItemDetailFragment;
 
 import java.util.List;
 
