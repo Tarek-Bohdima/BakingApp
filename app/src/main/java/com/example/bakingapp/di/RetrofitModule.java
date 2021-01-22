@@ -1,6 +1,8 @@
 package com.example.bakingapp.di;
 
 import com.example.bakingapp.network.RecipeApiService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.inject.Singleton;
 
@@ -20,12 +22,26 @@ public class RetrofitModule {
 
     @Provides
     @Singleton
-    public static RecipeApiService provideRecipeApiService(){
+    public  RecipeApiService provideRecipeApiService(GsonConverterFactory gsonConverterFactory){
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build()
                 .create(RecipeApiService.class);
     }
+
+    @Provides
+    @Singleton
+    public Gson gson() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        return gsonBuilder.create();
+    }
+
+    @Provides
+    @Singleton
+    public GsonConverterFactory gsonConverterFactory(Gson gson) {
+        return GsonConverterFactory.create(gson);
+    }
+
 }

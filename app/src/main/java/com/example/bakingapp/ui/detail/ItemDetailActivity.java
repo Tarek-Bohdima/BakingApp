@@ -6,9 +6,10 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 
 import com.example.bakingapp.R;
+import com.example.bakingapp.databinding.ActivityItemDetailBinding;
 import com.example.bakingapp.ui.list.ItemListActivity;
 
 /**
@@ -19,12 +20,17 @@ import com.example.bakingapp.ui.list.ItemListActivity;
  */
 public class ItemDetailActivity extends AppCompatActivity {
 
+    public ActivityItemDetailBinding activityItemDetailBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+
+        activityItemDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_item_detail);
+        activityItemDetailBinding.setLifecycleOwner(this);
+
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(activityItemDetailBinding.detailToolbar);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();

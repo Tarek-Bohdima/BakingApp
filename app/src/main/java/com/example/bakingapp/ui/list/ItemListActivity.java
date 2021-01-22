@@ -10,15 +10,23 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
-import com.example.bakingapp.dummy.DummyContent;
+import com.example.bakingapp.databinding.ActivityItemListBinding;
+import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.ItemDetailActivity;
 import com.example.bakingapp.ui.detail.ItemDetailFragment;
 
 import java.util.List;
+import java.util.Locale;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import timber.log.Timber;
 
 /**
  * An activity representing a list of Items. This activity
@@ -28,7 +36,12 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
+@AndroidEntryPoint
 public class ItemListActivity extends AppCompatActivity {
+
+
+    private ActivityItemListBinding activityItemListBinding;
+    private RecipeViewModel recipeViewModel;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -36,45 +49,54 @@ public class ItemListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        activityItemListBinding = DataBindingUtil.setContentView(this, R.layout.activity_item_list );
+        activityItemListBinding.setLifecycleOwner(this);
 
-        if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
 
-        View recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(activityItemListBinding.toolbar);
+        activityItemListBinding.toolbar.setTitle(getTitle());
+
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+
+        // The detail container view will be present only in the
+        // large-screen layouts (res/values-w900dp).
+        // If this view is present, then the
+        // activity should be in two-pane mode.
+        mTwoPane = findViewById(R.id.item_detail_container) != null;
+
+        RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
+        setupRecyclerView(recyclerView);
     }
 
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+        recipeViewModel.getRecipesList().observe(this, new Observer<List<Recipes>>() {
+            @Override
+            public void onChanged(List<Recipes> recipes) {
+                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(ItemListActivity.this,recipes,mTwoPane));
+            }
+        });
     }
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Recipes> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                Recipes item = (Recipes) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getName());
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -83,7 +105,7 @@ public class ItemListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.getName());
 
                     context.startActivity(intent);
                 }
@@ -91,7 +113,7 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<DummyContent.DummyItem> items,
+                                      List<Recipes> items,
                                       boolean twoPane) {
             mValues = items;
             mParentActivity = parent;
@@ -107,8 +129,10 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getName());
+            Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,
+                    "SimpleItemRecyclerViewAdapter: onBindViewHolder() called with: recipe's name = [%s]"
+                    , mValues.get(position).getName()));
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -121,12 +145,10 @@ public class ItemListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
-            final TextView mContentView;
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mIdView = view.findViewById(R.id.recipe_name);
             }
         }
     }
