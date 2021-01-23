@@ -29,7 +29,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:gravity="center"
-                    android:padding="4dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     tools:text="Recipe Name" />
 
