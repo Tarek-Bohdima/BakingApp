@@ -98,12 +98,12 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         private void isTablet(View view) {
-            Recipes item = (Recipes) view.getTag();
+            Recipes currentRecipe = (Recipes) view.getTag();
             if (mTwoPane) {
                 Bundle arguments = new Bundle();
-                arguments.putParcelable(ItemDetailFragment.ARG_ITEM_ID, item);
+                arguments.putParcelable(ItemDetailFragment.ARG_ITEM_ID, currentRecipe);
                 Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,"SimpleItemRecyclerViewAdapter: isTablet() called with: recipe = [%s]",
-                        item.getName()));
+                        currentRecipe.getName()));
                 ItemDetailFragment fragment = new ItemDetailFragment();
                 fragment.setArguments(arguments);
                 mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -112,9 +112,9 @@ public class ItemListActivity extends AppCompatActivity {
             } else {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ItemDetailActivity.class);
-                intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item);
+                intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, currentRecipe);
                 Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,"SimpleItemRecyclerViewAdapter: isNotTablet() called with: recipe = [%s]"
-                        , item.getName()));
+                        , currentRecipe.getName()));
 
                 context.startActivity(intent);
             }
