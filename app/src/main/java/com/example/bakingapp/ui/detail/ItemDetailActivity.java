@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.bakingapp.R;
@@ -30,7 +31,9 @@ public class ItemDetailActivity extends AppCompatActivity {
         activityItemDetailBinding.setLifecycleOwner(this);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(activityItemDetailBinding.detailToolbar);
+        Toolbar toolbar = activityItemDetailBinding.detailToolbar;
+        setSupportActionBar(toolbar);
+
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -58,6 +61,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit();
+
         }
     }
 

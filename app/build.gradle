@@ -37,6 +37,10 @@ android {
 
 dependencies {
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     def recyclerview_version = "1.1.0"
     def timber_version = "4.7.1"
     def Glide_version = "4.11.0"
@@ -46,8 +50,10 @@ dependencies {
     def rx_android_version = "3.0.0"
     def rx_java3_adapter_version = "2.9.0"
     def lifecycle_version = "2.2.0"
-    def room_version="2.2.6"
+    def room_version = "2.2.6"
     def hilt_version = "2.28-alpha"
+    def hilt_lifecycle_version = "1.0.0-alpha02"
+    def exoplayer_version = "2.12.3"
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
@@ -99,7 +105,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     annotationProcessor "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
-    annotationProcessor 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle_version"
+    annotationProcessor "androidx.hilt:hilt-compiler:$hilt_lifecycle_version"
+
+    // Exoplayer
+    implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
 
 }

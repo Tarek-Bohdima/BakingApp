@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import com.example.bakingapp.R;
 import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.list.ItemListActivity;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -52,10 +51,12 @@ public class ItemDetailFragment extends Fragment {
             mItem = bundle.getParcelable(ARG_ITEM_ID);
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getName());
-            }
+
+
+//            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+//            if (appBarLayout != null) {
+//                appBarLayout.setTitle(mItem.getName());
+//            }
         }
     }
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nested_recipe_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.detail.RecipeDetailFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F6C487"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/ingredients_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/detail_ingredients_header"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ingredients_recyclerview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            tools:listitem="@layout/ingredient_item" />
+
+        <TextView
+            android:id="@+id/step_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/detail_steps_header"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/steps_recyclerview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            tools:listitem="@layout/step_item" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
