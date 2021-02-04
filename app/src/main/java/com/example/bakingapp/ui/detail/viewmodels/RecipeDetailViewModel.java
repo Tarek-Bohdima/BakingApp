@@ -1,4 +1,4 @@
-package com.example.bakingapp.ui.detail;
+package com.example.bakingapp.ui.detail.viewmodels;
 
 import androidx.lifecycle.ViewModel;
 

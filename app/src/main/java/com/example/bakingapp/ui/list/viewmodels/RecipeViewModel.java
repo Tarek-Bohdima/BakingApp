@@ -1,4 +1,4 @@
-package com.example.bakingapp.ui.list;
+package com.example.bakingapp.ui.list.viewmodels;
 
 import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;

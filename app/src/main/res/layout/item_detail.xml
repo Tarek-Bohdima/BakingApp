@@ -13,6 +13,6 @@
         android:layout_height="match_parent"
         android:padding="16dp"
         android:textIsSelectable="true"
-        tools:context=".ui.detail.ItemDetailFragment"
+        tools:context=".ui.detail.fragments.ItemDetailFragment"
         tools:text="@tools:sample/lorem/random" />
 </layout>

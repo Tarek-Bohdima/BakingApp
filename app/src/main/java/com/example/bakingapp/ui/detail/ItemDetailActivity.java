@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityItemDetailBinding;
+import com.example.bakingapp.ui.detail.fragments.ItemDetailFragment;
 import com.example.bakingapp.ui.list.RecipesActivity;
 
 /**

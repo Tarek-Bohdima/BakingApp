@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.detail.StepDetailFragment">
+        tools:context=".ui.detail.fragments.StepDetailFragment">
 
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/exo_player_view"
