@@ -37,7 +37,7 @@ import timber.log.Timber;
  * item details side-by-side using two vertical panes.
  */
 @AndroidEntryPoint
-public class ItemListActivity extends AppCompatActivity {
+public class RecipesActivity extends AppCompatActivity {
 
 
     private ActivityItemListBinding activityItemListBinding;
@@ -79,7 +79,7 @@ public class ItemListActivity extends AppCompatActivity {
         recipeViewModel.getRecipesList().observe(this, new Observer<List<Recipes>>() {
             @Override
             public void onChanged(List<Recipes> recipes) {
-                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(ItemListActivity.this,recipes,mTwoPane));
+                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(RecipesActivity.this,recipes,mTwoPane));
             }
         });
     }
@@ -87,7 +87,7 @@ public class ItemListActivity extends AppCompatActivity {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final ItemListActivity mParentActivity;
+        private final RecipesActivity mParentActivity;
         private final List<Recipes> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -108,6 +108,7 @@ public class ItemListActivity extends AppCompatActivity {
                 fragment.setArguments(arguments);
                 mParentActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.item_detail_container, fragment)
+                        .addToBackStack(null)
                         .commit();
             } else {
                 Context context = view.getContext();
@@ -120,7 +121,7 @@ public class ItemListActivity extends AppCompatActivity {
             }
         }
 
-        SimpleItemRecyclerViewAdapter(ItemListActivity parent,
+        SimpleItemRecyclerViewAdapter(RecipesActivity parent,
                                       List<Recipes> items,
                                       boolean twoPane) {
             mValues = items;

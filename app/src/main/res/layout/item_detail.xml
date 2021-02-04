@@ -14,5 +14,5 @@
         android:padding="16dp"
         android:textIsSelectable="true"
         tools:context=".ui.detail.ItemDetailFragment"
-        tools:text="@tools:sample/lorem/random"/>
+        tools:text="@tools:sample/lorem/random" />
 </layout>

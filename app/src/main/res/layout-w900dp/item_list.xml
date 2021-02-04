@@ -16,7 +16,7 @@
         android:divider="?android:attr/dividerHorizontal"
         android:orientation="horizontal"
         android:showDividers="middle"
-        tools:context=".ui.list.ItemListActivity">
+        tools:context=".ui.list.RecipesActivity">
 
         <!--
         This layout is a two-pane layout for the Items master/detail flow.
@@ -31,7 +31,7 @@
             android:layout_marginRight="16dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
-            tools:context="com.example.bakingapp.ui.list.ItemListActivity"
+            tools:context="com.example.bakingapp.ui.list.RecipesActivity"
             tools:listitem="@layout/item_list_content" />
 
     </LinearLayout>

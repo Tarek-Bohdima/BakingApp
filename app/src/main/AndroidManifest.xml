@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BakingApp">
         <activity
-            android:name=".ui.list.ItemListActivity"
+            android:name=".ui.list.RecipesActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.BakingApp.NoActionBar">
             <intent-filter>
@@ -25,11 +25,11 @@
         <activity
             android:name=".ui.detail.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".ui.list.ItemListActivity"
+            android:parentActivityName=".ui.list.RecipesActivity"
             android:theme="@style/Theme.BakingApp.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.bakingapp.ui.list.ItemListActivity" />
+                android:value="com.example.bakingapp.ui.list.RecipesActivity" />
         </activity>
     </application>
 

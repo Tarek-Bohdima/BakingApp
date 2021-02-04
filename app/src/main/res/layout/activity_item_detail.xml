@@ -36,6 +36,8 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+            <include layout="@layout/recipe_detail_fragment"
+                android:id="@+id/included_detail_layout"/>
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
