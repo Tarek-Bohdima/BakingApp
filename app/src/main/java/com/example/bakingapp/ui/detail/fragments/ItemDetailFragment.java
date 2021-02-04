@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.model.Recipes;
-import com.example.bakingapp.ui.detail.ItemDetailActivity;
+import com.example.bakingapp.ui.detail.RecipeDetailActivity;
 import com.example.bakingapp.ui.list.RecipesActivity;
 
 /**
  * A fragment representing a single Item detail screen.
  * This fragment is either contained in a {@link RecipesActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
+ * in two-pane mode (on tablets) or a {@link RecipeDetailActivity}
  * on handsets.
  */
 public class ItemDetailFragment extends Fragment {

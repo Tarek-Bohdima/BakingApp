@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.bakingapp.R;
-import com.example.bakingapp.databinding.ActivityItemDetailBinding;
+import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
 import com.example.bakingapp.ui.detail.fragments.ItemDetailFragment;
 import com.example.bakingapp.ui.list.RecipesActivity;
 
@@ -20,19 +20,19 @@ import com.example.bakingapp.ui.list.RecipesActivity;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipesActivity}.
  */
-public class ItemDetailActivity extends AppCompatActivity {
+public class RecipeDetailActivity extends AppCompatActivity {
 
-    public ActivityItemDetailBinding activityItemDetailBinding;
+    public ActivityRecipeDetailBinding activityRecipeDetailBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activityItemDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_item_detail);
-        activityItemDetailBinding.setLifecycleOwner(this);
+        activityRecipeDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_detail);
+        activityRecipeDetailBinding.setLifecycleOwner(this);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        Toolbar toolbar = activityItemDetailBinding.detailToolbar;
+        Toolbar toolbar = activityRecipeDetailBinding.detailToolbar;
         setSupportActionBar(toolbar);
 
 

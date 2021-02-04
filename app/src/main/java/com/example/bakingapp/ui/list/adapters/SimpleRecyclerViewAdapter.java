@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.model.Recipes;
-import com.example.bakingapp.ui.detail.ItemDetailActivity;
+import com.example.bakingapp.ui.detail.RecipeDetailActivity;
 import com.example.bakingapp.ui.detail.fragments.ItemDetailFragment;
 import com.example.bakingapp.ui.list.RecipesActivity;
 
@@ -45,7 +45,7 @@ public class SimpleRecyclerViewAdapter
                     .commit();
         } else {
             Context context = view.getContext();
-            Intent intent = new Intent(context, ItemDetailActivity.class);
+            Intent intent = new Intent(context, RecipeDetailActivity.class);
             intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, currentRecipe);
             Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,"SimpleItemRecyclerViewAdapter: isNotTablet() called with: recipe = [%s]"
                     , currentRecipe.getName()));
