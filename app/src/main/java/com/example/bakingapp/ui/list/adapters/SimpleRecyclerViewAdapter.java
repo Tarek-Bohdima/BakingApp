@@ -2,7 +2,6 @@ package com.example.bakingapp.ui.list.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,39 +26,24 @@ public class SimpleRecyclerViewAdapter
 
     private final RecipesActivity mParentActivity;
     private final List<Recipes> mValues;
-    private final boolean mTwoPane;
-    private final View.OnClickListener mOnClickListener = this::isTablet;
-
-    private void isTablet(View view) {
-        Recipes currentRecipe = (Recipes) view.getTag();
-        if (mTwoPane) {
-            Bundle arguments = new Bundle();
-            arguments.putParcelable(ItemDetailFragment.ARG_ITEM_ID, currentRecipe);
-            Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,"SimpleItemRecyclerViewAdapter: isTablet() called with: recipe = [%s]",
-                    currentRecipe.getName()));
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
-            mParentActivity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            Context context = view.getContext();
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Recipes currentRecipe = (Recipes) v.getTag();
+            Context context = v.getContext();
             Intent intent = new Intent(context, RecipeDetailActivity.class);
             intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, currentRecipe);
-            Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,"SimpleItemRecyclerViewAdapter: isNotTablet() called with: recipe = [%s]"
+            Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH, "SimpleItemRecyclerViewAdapter: isNotTablet() called with: recipe = [%s]"
                     , currentRecipe.getName()));
 
             context.startActivity(intent);
         }
-    }
+    };
 
     public SimpleRecyclerViewAdapter(RecipesActivity parent,
-                                     List<Recipes> items,
-                                     boolean twoPane) {
+                                     List<Recipes> items) {
         mValues = items;
         mParentActivity = parent;
-        mTwoPane = twoPane;
     }
 
     @Override
