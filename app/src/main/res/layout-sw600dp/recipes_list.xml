@@ -32,7 +32,7 @@
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:context="com.example.bakingapp.ui.list.RecipesActivity"
-            tools:listitem="@layout/item_list_content" />
+            tools:listitem="@layout/recipe_item" />
 
     </LinearLayout>
 </layout>

@@ -24,6 +24,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
 
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         activityRecipeDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_detail);
         activityRecipeDetailBinding.setLifecycleOwner(this);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         Toolbar toolbar = activityRecipeDetailBinding.detailToolbar;
         setSupportActionBar(toolbar);
 
@@ -62,6 +63,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit();
+
+            mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         }
     }
