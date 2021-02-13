@@ -11,7 +11,9 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
-import com.example.bakingapp.ui.detail.fragments.ItemDetailFragment;
+import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
+import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
+import com.example.bakingapp.ui.detail.fragments.StepDetailFragment;
 import com.example.bakingapp.ui.list.RecipesActivity;
 
 /**
@@ -20,7 +22,7 @@ import com.example.bakingapp.ui.list.RecipesActivity;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipesActivity}.
  */
-public class RecipeDetailActivity extends AppCompatActivity {
+public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.OnStepClickListener {
 
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
 
@@ -43,6 +45,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -55,17 +59,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
+//            Bundle arguments = new Bundle();
+//            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
+//                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
+//            ItemDetailFragment fragment = new ItemDetailFragment();
+//            fragment.setArguments(arguments);
+            RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
+                    .add(R.id.item_detail_container, recipeDetailFragment)
                     .commit();
 
-            mTwoPane = getResources().getBoolean(R.bool.isTablet);
-
+            if (mTwoPane) {
+                StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.detail_steps_container, stepDetailFragment)
+                        .commit();
+            }
         }
     }
 
@@ -83,5 +92,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStepClick(int position) {
+        
     }
 }

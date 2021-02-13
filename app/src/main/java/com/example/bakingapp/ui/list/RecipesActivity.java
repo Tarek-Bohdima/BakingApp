@@ -45,7 +45,7 @@ public class RecipesActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recipeViewModel.getRecipesList().observe(this,
-                recipes -> recyclerView.setAdapter(new SimpleRecyclerViewAdapter(RecipesActivity.this, recipes)));
+                recipes -> recyclerView.setAdapter(new SimpleRecyclerViewAdapter(recipes)));
     }
 
 

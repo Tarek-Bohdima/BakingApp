@@ -1,6 +1,5 @@
 package com.example.bakingapp.ui.list.viewmodels;
 
-import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -9,12 +8,18 @@ import com.example.bakingapp.repository.Repository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class RecipeViewModel extends ViewModel {
 
     LiveData<List<Recipes>> recipesLivedata;
     private Repository repository;
 
-    @ViewModelInject
+
+    @Inject
     public RecipeViewModel(Repository repository) {
         recipesLivedata = repository.getRecipes();
         this.repository = repository;

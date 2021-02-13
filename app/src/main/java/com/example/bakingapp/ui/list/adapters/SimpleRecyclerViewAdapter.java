@@ -13,8 +13,9 @@ import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.RecipeDetailActivity;
-import com.example.bakingapp.ui.detail.fragments.ItemDetailFragment;
-import com.example.bakingapp.ui.list.RecipesActivity;
+import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -24,30 +25,26 @@ import timber.log.Timber;
 public class SimpleRecyclerViewAdapter
         extends RecyclerView.Adapter<SimpleRecyclerViewAdapter.ViewHolder> {
 
-    private final RecipesActivity mParentActivity;
-    private final List<Recipes> mValues;
-    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Recipes currentRecipe = (Recipes) v.getTag();
-            Context context = v.getContext();
-            Intent intent = new Intent(context, RecipeDetailActivity.class);
-            intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, currentRecipe);
-            Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH, "SimpleItemRecyclerViewAdapter: isNotTablet() called with: recipe = [%s]"
-                    , currentRecipe.getName()));
+    private final List<Recipes> recipes;
+    private final View.OnClickListener mOnClickListener = SimpleRecyclerViewAdapter::onClick;
 
-            context.startActivity(intent);
-        }
-    };
+    public SimpleRecyclerViewAdapter(List<Recipes> recipes) {
+        this.recipes = recipes;
+    }
 
-    public SimpleRecyclerViewAdapter(RecipesActivity parent,
-                                     List<Recipes> items) {
-        mValues = items;
-        mParentActivity = parent;
+    private static void onClick(View v) {
+        Recipes currentRecipe = (Recipes) v.getTag();
+        Context context = v.getContext();
+        Intent intent = new Intent(context, RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailFragment.CURRENT_RECIPE, currentRecipe);
+        Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH, "SimpleItemRecyclerViewAdapter: onClick called with: recipe = [%s]"
+                , currentRecipe.getName()));
+
+        context.startActivity(intent);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public @NotNull ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_item, parent, false);
         return new ViewHolder(view);
@@ -55,21 +52,21 @@ public class SimpleRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mIdView.setText(mValues.get(position).getName());
+        holder.mIdView.setText(recipes.get(position).getName());
         Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,
                 "SimpleItemRecyclerViewAdapter: onBindViewHolder() called with: recipe's name = [%s]"
-                , mValues.get(position).getName()));
+                , recipes.get(position).getName()));
 
-        holder.itemView.setTag(mValues.get(position));
+        holder.itemView.setTag(recipes.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return recipes.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mIdView;
 
         ViewHolder(View view) {

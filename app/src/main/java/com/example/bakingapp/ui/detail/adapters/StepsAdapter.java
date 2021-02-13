@@ -14,9 +14,15 @@ import java.util.List;
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
     StepItemBinding stepItemBinding;
     List<Steps> steps;
+    OnStepClickListener onStepClickListener;
 
-    public StepsAdapter(List<Steps> steps) {
+    public interface OnStepClickListener {
+        void onStepClick(int position);
+    }
+
+    public StepsAdapter(List<Steps> steps, OnStepClickListener onStepClickListener) {
         this.steps = steps;
+        this.onStepClickListener = onStepClickListener;
     }
 
     @NonNull
@@ -29,7 +35,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onBindViewHolder(@NonNull StepsViewHolder holder, int position) {
         Steps currentSteps = steps.get(position);
-        holder.bind(currentSteps);
+        holder.bind(currentSteps, onStepClickListener);
     }
 
     @Override
@@ -51,8 +57,11 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             this.stepItemBinding = stepItemBinding;
         }
 
-        public void bind(Steps steps) {
+        public void bind(Steps steps, OnStepClickListener onStepClickListener) {
             stepItemBinding.stepShortDescription.setText(steps.getShortDescription());
+            stepItemBinding.setStep(steps);
+            stepItemBinding.setPosition(getAdapterPosition());
+            stepItemBinding.setStepItemClick(onStepClickListener);
             stepItemBinding.executePendingBindings();
         }
     }

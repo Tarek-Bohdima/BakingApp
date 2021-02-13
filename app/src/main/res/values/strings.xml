@@ -6,4 +6,7 @@
     <string name="detail_steps_header">Steps</string>
     <string name="previous_button_text">Previous</string>
     <string name="next_button_text">Next</string>
+
+    <!-- Text for the exception message in StepDetailFragment -->
+<!--    <string name="exception_message">must implement OnStepFragmentClickListener</string>-->
 </resources>

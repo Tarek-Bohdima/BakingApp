@@ -44,9 +44,9 @@ public class Steps implements Parcelable {
         return shortDescription;
     }
 
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
+//    public void setShortDescription(String shortDescription) {
+//        this.shortDescription = shortDescription;
+//    }
 
     public String getDescription() {
         return description;

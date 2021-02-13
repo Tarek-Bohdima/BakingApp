@@ -16,6 +16,7 @@ import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 public class RecipeDetailFragment extends Fragment {
 
     private RecipeDetailViewModel mViewModel;
+    public static final String CURRENT_RECIPE = "current_recipe";
 
     public static RecipeDetailFragment newInstance() {
         return new RecipeDetailFragment();
