@@ -16,9 +16,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     IngredientItemBinding ingredientItemBinding;
     List<Ingredients> ingredients;
 
-    public IngredientsAdapter(List<Ingredients> ingredients) {
-        this.ingredients = ingredients;
-    }
 
     @NonNull
     @Override
@@ -53,9 +50,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         }
 
         public void bind(Ingredients ingredients) {
-            ingredientItemBinding.quantityTextview.setText(String.valueOf(ingredients.getQuantity()));
-            ingredientItemBinding.measurementUnitTextview.setText(ingredients.getMeasure());
-            ingredientItemBinding.ingredientsTextview.setText(ingredients.getIngredient());
+            ingredientItemBinding.setIngredients(ingredients);
 
             ingredientItemBinding.executePendingBindings();
         }

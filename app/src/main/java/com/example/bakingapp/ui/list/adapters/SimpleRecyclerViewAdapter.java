@@ -61,6 +61,8 @@ public class SimpleRecyclerViewAdapter
         holder.itemView.setOnClickListener(mOnClickListener);
     }
 
+
+
     @Override
     public int getItemCount() {
         return recipes.size();

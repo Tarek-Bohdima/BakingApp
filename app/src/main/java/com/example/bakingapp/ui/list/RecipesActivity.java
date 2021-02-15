@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bakingapp.R;
+import com.example.bakingapp.databinding.ActivityRecipesListBinding;
 import com.example.bakingapp.ui.detail.RecipeDetailActivity;
 import com.example.bakingapp.ui.list.adapters.SimpleRecyclerViewAdapter;
 import com.example.bakingapp.ui.list.viewmodels.RecipeViewModel;
@@ -30,7 +31,9 @@ public class RecipesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        com.example.bakingapp.databinding.ActivityRecipesListBinding activityItemListBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
+        ActivityRecipesListBinding activityItemListBinding =
+                DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
+
         activityItemListBinding.setLifecycleOwner(this);
 
         setSupportActionBar(activityItemListBinding.toolbar);

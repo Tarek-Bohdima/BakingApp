@@ -11,10 +11,14 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
+import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.detail.fragments.StepDetailFragment;
+import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 import com.example.bakingapp.ui.list.RecipesActivity;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -22,11 +26,16 @@ import com.example.bakingapp.ui.list.RecipesActivity;
  * item details are presented side-by-side with a list of items
  * in a {@link RecipesActivity}.
  */
+@AndroidEntryPoint
 public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.OnStepClickListener {
 
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
 
+    private RecipeDetailViewModel recipeDetailViewModel;
+
     private boolean mTwoPane;
+
+    private Recipes currentRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
+        // TODO setup recipedetailViewModel and use its current recipe for databinding on fragments layouts
+//        recipeDetailViewModel = new ViewModelProvider(this).get(RecipeDetailViewModel.class);
+
+//        currentRecipe = recipeDetailViewModel.getCurrentRecipe();
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -60,17 +74,19 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
 //            Bundle arguments = new Bundle();
-//            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
-//                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
-//            ItemDetailFragment fragment = new ItemDetailFragment();
-//            fragment.setArguments(arguments);
+//            arguments.putParcelable(RecipeDetailFragment.CURRENT_RECIPE,
+//                    currentRecipe);
+
             RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
+//            recipeDetailFragment.setArguments(arguments);
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, recipeDetailFragment)
                     .commit();
 
             if (mTwoPane) {
                 StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
+//                stepDetailFragment.setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.detail_steps_container, stepDetailFragment)
                         .commit();
