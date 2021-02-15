@@ -17,6 +17,7 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.RecipeDetailFragmentBinding;
 import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.adapters.IngredientsAdapter;
+import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
 import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -24,11 +25,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class RecipeDetailFragment extends Fragment {
 
-    private RecipeDetailViewModel mViewModel;
     public static final String CURRENT_RECIPE = "current_recipe";
     private Recipes currentRecipe;
     private RecipeDetailFragmentBinding recipeDetailFragmentBinding;
-    private IngredientsAdapter ingredientsAdapter;
+    private StepsAdapter.OnStepClickListener onStepClickListener;
 
     public static RecipeDetailFragment newInstance() {
         return new RecipeDetailFragment();
@@ -44,8 +44,7 @@ public class RecipeDetailFragment extends Fragment {
                         R.layout.recipe_detail_fragment,
                         container,false);
 
-        mViewModel = new ViewModelProvider(getActivity()).get(RecipeDetailViewModel.class);
-        currentRecipe = mViewModel.getCurrentRecipe();
+
 
         return recipeDetailFragmentBinding.getRoot();
 
@@ -55,32 +54,39 @@ public class RecipeDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        RecipeDetailViewModel mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
+        currentRecipe = mViewModel.getCurrentRecipe();
 
+        setupIngredientsRecyclerView();
 
-        setuprecyclerView();
+        setupStepsRecyclerView();
     }
 
-    private void setuprecyclerView() {
+    private void setupStepsRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        StepsAdapter stepsAdapter = new StepsAdapter(currentRecipe.getSteps(),onStepClickListener);
+        stepsAdapter.setStepsData(currentRecipe.getSteps());
+
+        RecyclerView stepsRecyclerView = recipeDetailFragmentBinding.stepsRecyclerview;
+        stepsRecyclerView.setLayoutManager(layoutManager);
+        stepsRecyclerView.setHasFixedSize(true);
+        stepsRecyclerView.setAdapter(stepsAdapter);
+    }
+
+    private void setupIngredientsRecyclerView() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        ingredientsAdapter = new IngredientsAdapter();
+        IngredientsAdapter ingredientsAdapter = new IngredientsAdapter();
         ingredientsAdapter.setIngredientsData(currentRecipe.getIngredients());
 
         RecyclerView ingredientsRecyclerView = recipeDetailFragmentBinding.ingredientsRecyclerview;
         ingredientsRecyclerView.setLayoutManager(layoutManager);
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
-
-
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
 
     }
 

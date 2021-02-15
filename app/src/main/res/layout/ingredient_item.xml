@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="ingredients"
             type="com.example.bakingapp.model.Ingredients" />

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="step"
             type="com.example.bakingapp.model.Steps" />
@@ -10,7 +11,7 @@
         <variable
             name="stepItemClick"
             type="com.example.bakingapp.ui.detail.adapters.StepsAdapter.OnStepClickListener" />
-        
+
         <variable
             name="position"
             type="int" />
