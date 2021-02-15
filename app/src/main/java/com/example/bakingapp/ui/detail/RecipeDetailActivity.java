@@ -56,11 +56,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
-        // TODO setup recipedetailViewModel and use its current recipe for databinding on fragments layouts
-//        recipeDetailViewModel = new ViewModelProvider(this).get(RecipeDetailViewModel.class);
-
-//        currentRecipe = recipeDetailViewModel.getCurrentRecipe();
-
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -73,12 +68,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-//            Bundle arguments = new Bundle();
-//            arguments.putParcelable(RecipeDetailFragment.CURRENT_RECIPE,
-//                    currentRecipe);
 
             RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
-//            recipeDetailFragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, recipeDetailFragment)

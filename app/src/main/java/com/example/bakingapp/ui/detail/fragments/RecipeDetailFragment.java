@@ -45,7 +45,6 @@ public class RecipeDetailFragment extends Fragment {
                         container,false);
 
 
-
         return recipeDetailFragmentBinding.getRoot();
 
     }
@@ -66,6 +65,7 @@ public class RecipeDetailFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        // TODO do something for onStepClickListener!!
         StepsAdapter stepsAdapter = new StepsAdapter(currentRecipe.getSteps(),onStepClickListener);
         stepsAdapter.setStepsData(currentRecipe.getSteps());
 
