@@ -19,23 +19,23 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class StepDetailFragment extends Fragment {
 
-    private RecipeDetailViewModel mViewModel;
     private Recipes currentRecipe;
 
     public static StepDetailFragment newInstance() {
+
         return new StepDetailFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.step_detail_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_step_detail, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(getActivity()).get(RecipeDetailViewModel.class);
+        RecipeDetailViewModel mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
         currentRecipe = mViewModel.getCurrentRecipe();
     }
 

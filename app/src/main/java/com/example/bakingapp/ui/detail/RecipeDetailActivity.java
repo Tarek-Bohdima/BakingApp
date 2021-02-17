@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
 import com.example.bakingapp.model.Recipes;
+import com.example.bakingapp.model.Steps;
 import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.detail.fragments.StepDetailFragment;
@@ -36,6 +37,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
     private boolean mTwoPane;
 
     private Recipes currentRecipe;
+
+    private StepDetailFragment stepDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +79,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
                     .commit();
 
             if (mTwoPane) {
-                StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
-//                stepDetailFragment.setArguments(arguments);
+
+                stepDetailFragment = StepDetailFragment.newInstance();
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.detail_steps_container, stepDetailFragment)
                         .commit();
@@ -102,7 +105,15 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
     }
 
     @Override
-    public void onStepClick(int position) {
-        
+    public void onStepClick(Steps steps) {
+        stepDetailFragment = StepDetailFragment.newInstance();
+        if (mTwoPane) {
+
+        }else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.item_detail_container,stepDetailFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }

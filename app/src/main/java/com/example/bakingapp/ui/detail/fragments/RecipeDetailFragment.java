@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bakingapp.R;
-import com.example.bakingapp.databinding.RecipeDetailFragmentBinding;
+import com.example.bakingapp.databinding.FragmentRecipeDetailBinding;
 import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.adapters.IngredientsAdapter;
 import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
@@ -27,7 +27,7 @@ public class RecipeDetailFragment extends Fragment {
 
     public static final String CURRENT_RECIPE = "current_recipe";
     private Recipes currentRecipe;
-    private RecipeDetailFragmentBinding recipeDetailFragmentBinding;
+    private FragmentRecipeDetailBinding fragmentRecipeDetailBinding;
     private StepsAdapter.OnStepClickListener onStepClickListener;
 
     public static RecipeDetailFragment newInstance() {
@@ -37,15 +37,15 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.recipe_detail_fragment, container, false);
+//        return inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
-        recipeDetailFragmentBinding = DataBindingUtil
+        fragmentRecipeDetailBinding = DataBindingUtil
                 .inflate(inflater,
-                        R.layout.recipe_detail_fragment,
+                        R.layout.fragment_recipe_detail,
                         container,false);
 
 
-        return recipeDetailFragmentBinding.getRoot();
+        return fragmentRecipeDetailBinding.getRoot();
 
     }
 
@@ -65,11 +65,11 @@ public class RecipeDetailFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        // TODO do something for onStepClickListener!!
+        // TODO do something for onStepClickListener!! in StepsAdapter and implement it in RecipeDetailActivity
         StepsAdapter stepsAdapter = new StepsAdapter(currentRecipe.getSteps(),onStepClickListener);
         stepsAdapter.setStepsData(currentRecipe.getSteps());
 
-        RecyclerView stepsRecyclerView = recipeDetailFragmentBinding.stepsRecyclerview;
+        RecyclerView stepsRecyclerView = fragmentRecipeDetailBinding.stepsRecyclerview;
         stepsRecyclerView.setLayoutManager(layoutManager);
         stepsRecyclerView.setHasFixedSize(true);
         stepsRecyclerView.setAdapter(stepsAdapter);
@@ -83,7 +83,7 @@ public class RecipeDetailFragment extends Fragment {
         IngredientsAdapter ingredientsAdapter = new IngredientsAdapter();
         ingredientsAdapter.setIngredientsData(currentRecipe.getIngredients());
 
-        RecyclerView ingredientsRecyclerView = recipeDetailFragmentBinding.ingredientsRecyclerview;
+        RecyclerView ingredientsRecyclerView = fragmentRecipeDetailBinding.ingredientsRecyclerview;
         ingredientsRecyclerView.setLayoutManager(layoutManager);
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);

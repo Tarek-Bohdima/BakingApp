@@ -16,5 +16,5 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".ui.list.RecipesActivity"
-        tools:listitem="@layout/recipe_item" />
+        tools:listitem="@layout/item_recipe" />
 </layout>

@@ -6,18 +6,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bakingapp.databinding.StepItemBinding;
+import com.example.bakingapp.databinding.ItemStepBinding;
 import com.example.bakingapp.model.Steps;
 
 import java.util.List;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
-    StepItemBinding stepItemBinding;
+    ItemStepBinding itemStepBinding;
     List<Steps> steps;
     OnStepClickListener onStepClickListener;
 
     public interface OnStepClickListener {
-        void onStepClick(int position);
+        void onStepClick(Steps steps);
     }
 
     public StepsAdapter(List<Steps> steps, OnStepClickListener onStepClickListener) {
@@ -28,8 +28,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @NonNull
     @Override
     public StepsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        stepItemBinding = StepItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new StepsViewHolder(stepItemBinding);
+        itemStepBinding = ItemStepBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new StepsViewHolder(itemStepBinding);
     }
 
     @Override
@@ -50,19 +50,18 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
     public class StepsViewHolder extends RecyclerView.ViewHolder{
 
-        StepItemBinding stepItemBinding;
+        ItemStepBinding itemStepBinding;
 
-        public StepsViewHolder(StepItemBinding stepItemBinding) {
-            super(stepItemBinding.getRoot());
-            this.stepItemBinding = stepItemBinding;
+        public StepsViewHolder(ItemStepBinding itemStepBinding) {
+            super(itemStepBinding.getRoot());
+            this.itemStepBinding = itemStepBinding;
         }
 
         public void bind(Steps steps, OnStepClickListener onStepClickListener) {
-            stepItemBinding.stepShortDescription.setText(steps.getShortDescription());
-            stepItemBinding.setStep(steps);
-            stepItemBinding.setPosition(getAdapterPosition());
-            stepItemBinding.setStepItemClick(onStepClickListener);
-            stepItemBinding.executePendingBindings();
+            itemStepBinding.stepShortDescription.setText(steps.getShortDescription());
+            itemStepBinding.setStep(steps);
+            itemStepBinding.setStepItemClick(onStepClickListener);
+            itemStepBinding.executePendingBindings();
         }
     }
 }

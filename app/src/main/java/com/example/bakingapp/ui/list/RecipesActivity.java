@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipesListBinding;
 import com.example.bakingapp.ui.detail.RecipeDetailActivity;
-import com.example.bakingapp.ui.list.adapters.SimpleRecyclerViewAdapter;
+import com.example.bakingapp.ui.list.adapters.RecipesRecyclerViewAdaper;
 import com.example.bakingapp.ui.list.viewmodels.RecipeViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -48,7 +48,7 @@ public class RecipesActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recipeViewModel.getRecipesList().observe(this,
-                recipes -> recyclerView.setAdapter(new SimpleRecyclerViewAdapter(recipes)));
+                recipes -> recyclerView.setAdapter(new RecipesRecyclerViewAdaper(recipes)));
     }
 
 

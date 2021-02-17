@@ -6,22 +6,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bakingapp.databinding.IngredientItemBinding;
+
+import com.example.bakingapp.databinding.ItemIngredientBinding;
 import com.example.bakingapp.model.Ingredients;
 
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientsViewHolder> {
 
-    IngredientItemBinding ingredientItemBinding;
+    ItemIngredientBinding itemIngredientBinding;
     List<Ingredients> ingredients;
 
 
     @NonNull
     @Override
     public IngredientsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ingredientItemBinding = IngredientItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new IngredientsViewHolder(ingredientItemBinding);
+        itemIngredientBinding = ItemIngredientBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new IngredientsViewHolder(itemIngredientBinding);
     }
 
     @Override
@@ -42,17 +43,17 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     public class IngredientsViewHolder extends RecyclerView.ViewHolder{
 
-        IngredientItemBinding ingredientItemBinding;
+        ItemIngredientBinding itemIngredientBinding;
 
-        public IngredientsViewHolder(IngredientItemBinding ingredientItemBinding) {
-            super(ingredientItemBinding.getRoot());
-            this.ingredientItemBinding = ingredientItemBinding;
+        public IngredientsViewHolder(ItemIngredientBinding itemIngredientBinding) {
+            super(itemIngredientBinding.getRoot());
+            this.itemIngredientBinding = itemIngredientBinding;
         }
 
         public void bind(Ingredients ingredients) {
-            ingredientItemBinding.setIngredients(ingredients);
+            itemIngredientBinding.setIngredients(ingredients);
 
-            ingredientItemBinding.executePendingBindings();
+            itemIngredientBinding.executePendingBindings();
         }
     }
 }

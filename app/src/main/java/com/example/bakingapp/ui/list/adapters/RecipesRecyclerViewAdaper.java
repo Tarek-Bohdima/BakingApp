@@ -22,13 +22,13 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class SimpleRecyclerViewAdapter
-        extends RecyclerView.Adapter<SimpleRecyclerViewAdapter.ViewHolder> {
+public class RecipesRecyclerViewAdaper
+        extends RecyclerView.Adapter<RecipesRecyclerViewAdaper.ViewHolder> {
 
     private final List<Recipes> recipes;
-    private final View.OnClickListener mOnClickListener = SimpleRecyclerViewAdapter::onClick;
+    private final View.OnClickListener mOnClickListener = RecipesRecyclerViewAdaper::onClick;
 
-    public SimpleRecyclerViewAdapter(List<Recipes> recipes) {
+    public RecipesRecyclerViewAdaper(List<Recipes> recipes) {
         this.recipes = recipes;
     }
 
@@ -46,7 +46,7 @@ public class SimpleRecyclerViewAdapter
     @Override
     public @NotNull ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipe_item, parent, false);
+                .inflate(R.layout.item_recipe, parent, false);
         return new ViewHolder(view);
     }
 

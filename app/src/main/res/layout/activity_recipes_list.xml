@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <include layout="@layout/recipes_list"
+            <include layout="@layout/list_recipes"
                 android:id="@+id/included_layout"/>
         </FrameLayout>
 
