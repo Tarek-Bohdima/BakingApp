@@ -41,7 +41,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         notifyDataSetChanged();
     }
 
-    public class IngredientsViewHolder extends RecyclerView.ViewHolder{
+    public static class IngredientsViewHolder extends RecyclerView.ViewHolder{
 
         ItemIngredientBinding itemIngredientBinding;
 

@@ -13,22 +13,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentRecipeDetailBinding;
 import com.example.bakingapp.model.Recipes;
+import com.example.bakingapp.model.Steps;
 import com.example.bakingapp.ui.detail.adapters.IngredientsAdapter;
 import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
 import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import timber.log.Timber;
 
 @AndroidEntryPoint
-public class RecipeDetailFragment extends Fragment {
+public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnStepClickListener {
 
     public static final String CURRENT_RECIPE = "current_recipe";
     private Recipes currentRecipe;
+    private Steps currentStep;
     private FragmentRecipeDetailBinding fragmentRecipeDetailBinding;
-    private StepsAdapter.OnStepClickListener onStepClickListener;
+    private RecipeDetailViewModel mViewModel;
+    private boolean mTwoPane;
+
+    public RecipeDetailFragment() {
+    }
 
     public static RecipeDetailFragment newInstance() {
         return new RecipeDetailFragment();
@@ -53,20 +61,21 @@ public class RecipeDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecipeDetailViewModel mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
         currentRecipe = mViewModel.getCurrentRecipe();
 
         setupIngredientsRecyclerView();
 
         setupStepsRecyclerView();
+
     }
 
     private void setupStepsRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        // TODO do something for onStepClickListener!! in StepsAdapter and implement it in RecipeDetailActivity
-        StepsAdapter stepsAdapter = new StepsAdapter(currentRecipe.getSteps(),onStepClickListener);
+        StepsAdapter stepsAdapter = new StepsAdapter(currentRecipe.getSteps(), this);
         stepsAdapter.setStepsData(currentRecipe.getSteps());
 
         RecyclerView stepsRecyclerView = fragmentRecipeDetailBinding.stepsRecyclerview;
@@ -90,4 +99,34 @@ public class RecipeDetailFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStepClick(Steps steps) {
+        String uri = steps.getVideoUrl();
+        Timber.tag(Constants.TAG).d("RecipeDetailFragment: onStepClick() called with: video uri = [" + uri + "]");
+        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
+        mViewModel.setCurrentStep(steps);
+        if (mTwoPane) {
+
+        } else {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.item_detail_container, stepDetailFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+//    @Override
+//    public void onStepClick(Steps steps) {
+//        mViewModel.setCurrentStep(steps);
+//        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
+//        if (mTwoPane) {
+//
+//        }else {
+//            getActivity().getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.item_detail_container,stepDetailFragment)
+//                    .addToBackStack(null)
+//                    .commit();
+//        }
+//    }
 }

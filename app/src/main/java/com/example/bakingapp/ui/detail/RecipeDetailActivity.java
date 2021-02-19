@@ -12,8 +12,6 @@ import androidx.databinding.DataBindingUtil;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
 import com.example.bakingapp.model.Recipes;
-import com.example.bakingapp.model.Steps;
-import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.detail.fragments.StepDetailFragment;
 import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
@@ -28,17 +26,15 @@ import dagger.hilt.android.AndroidEntryPoint;
  * in a {@link RecipesActivity}.
  */
 @AndroidEntryPoint
-public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.OnStepClickListener {
+public class RecipeDetailActivity extends AppCompatActivity {
 
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
 
     private RecipeDetailViewModel recipeDetailViewModel;
 
-    private boolean mTwoPane;
-
     private Recipes currentRecipe;
 
-    private StepDetailFragment stepDetailFragment;
+    private boolean mTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +53,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        boolean mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -80,12 +76,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
 
             if (mTwoPane) {
 
-                stepDetailFragment = StepDetailFragment.newInstance();
+                StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.detail_steps_container, stepDetailFragment)
                         .commit();
             }
         }
+        replaceFragment();
+    }
+
+    public void replaceFragment() {
+
     }
 
     @Override
@@ -104,16 +105,16 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onStepClick(Steps steps) {
-        stepDetailFragment = StepDetailFragment.newInstance();
-        if (mTwoPane) {
-
-        }else {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container,stepDetailFragment)
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
+//    @Override
+//    public void onStepClick(Steps steps) {
+//        stepDetailFragment = StepDetailFragment.newInstance();
+//        if (mTwoPane) {
+//
+//        }else {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.item_detail_container,stepDetailFragment)
+//                    .addToBackStack(null)
+//                    .commit();
+//        }
+//    }
 }

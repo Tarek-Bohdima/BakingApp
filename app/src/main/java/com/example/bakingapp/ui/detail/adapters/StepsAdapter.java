@@ -6,10 +6,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bakingapp.Constants;
 import com.example.bakingapp.databinding.ItemStepBinding;
 import com.example.bakingapp.model.Steps;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
     ItemStepBinding itemStepBinding;
@@ -35,6 +38,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onBindViewHolder(@NonNull StepsViewHolder holder, int position) {
         Steps currentSteps = steps.get(position);
+        String uri = currentSteps.getVideoUrl();
+        Timber.tag(Constants.TAG).d("StepsAdapter: onBindViewHolder() called with: video uri: " + uri);
         holder.bind(currentSteps, onStepClickListener);
     }
 
@@ -48,7 +53,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         notifyDataSetChanged();
     }
 
-    public class StepsViewHolder extends RecyclerView.ViewHolder{
+    public static class StepsViewHolder extends RecyclerView.ViewHolder{
 
         ItemStepBinding itemStepBinding;
 

@@ -37,9 +37,6 @@ public class RecipesRecyclerViewAdaper
         Context context = v.getContext();
         Intent intent = new Intent(context, RecipeDetailActivity.class);
         intent.putExtra(RecipeDetailFragment.CURRENT_RECIPE, currentRecipe);
-        Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH, "SimpleItemRecyclerViewAdapter: onClick called with: recipe = [%s]"
-                , currentRecipe.getName()));
-
         context.startActivity(intent);
     }
 
@@ -54,7 +51,7 @@ public class RecipesRecyclerViewAdaper
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mIdView.setText(recipes.get(position).getName());
         Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,
-                "SimpleItemRecyclerViewAdapter: onBindViewHolder() called with: recipe's name = [%s]"
+                "aRecipesRecyclerViewAdaper: onBindViewHolder() called with: recipe's name = [%s]"
                 , recipes.get(position).getName()));
 
         holder.itemView.setTag(recipes.get(position));
