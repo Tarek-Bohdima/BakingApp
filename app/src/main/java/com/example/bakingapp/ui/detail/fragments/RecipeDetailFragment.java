@@ -32,8 +32,8 @@ import timber.log.Timber;
 public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnStepClickListener {
 
     public static final String CURRENT_RECIPE = "current_recipe";
-    private Recipes currentRecipe;
     private final List<Steps> stepsList = new ArrayList<>();
+    private Recipes currentRecipe;
     private FragmentRecipeDetailBinding fragmentRecipeDetailBinding;
     private RecipeDetailViewModel mViewModel;
     private boolean mTwoPane;
@@ -53,7 +53,7 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         fragmentRecipeDetailBinding = DataBindingUtil
                 .inflate(inflater,
                         R.layout.fragment_recipe_detail,
-                        container,false);
+                        container, false);
 
 
         return fragmentRecipeDetailBinding.getRoot();

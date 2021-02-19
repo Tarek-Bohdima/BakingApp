@@ -29,10 +29,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class RecipesActivity extends AppCompatActivity {
 
-    private ActivityRecipesListBinding activityItemListBinding;
-    private RecipeViewModel recipeViewModel;
-    private List<Recipes> recipesList = new ArrayList<>();
     RecipesAdapter recipesAdapter;
+    private ActivityRecipesListBinding activityItemListBinding;
+    private final List<Recipes> recipesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +45,12 @@ public class RecipesActivity extends AppCompatActivity {
         setSupportActionBar(activityItemListBinding.toolbar);
         activityItemListBinding.toolbar.setTitle(getTitle());
 
-        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
-
+        RecipeViewModel recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
 
         setupRecyclerView();
         recipeViewModel.getRecipesList().observe(this,
-                recipesData -> {
-                    recipesAdapter.setData(recipesData);
-                });
+                recipesData -> recipesAdapter.setData(recipesData));
     }
 
     private void setupRecyclerView() {

@@ -28,13 +28,13 @@ public class RecipeDetailViewModel extends ViewModel {
         return currentRecipe;
     }
 
+    public Steps getCurrentStep() {
+        return currentStep;
+    }
+
     public void setCurrentStep(Steps steps) {
 
         currentStep = steps;
         Timber.tag(Constants.TAG).d("RecipeDetailViewModel: setCurrentStep() called with: step video url = [" + steps.getVideoURL() + "]");
-    }
-
-    public Steps getCurrentStep() {
-        return currentStep;
     }
 }

@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Ingredients implements Parcelable {
+    public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
+        @Override
+        public Ingredients createFromParcel(Parcel in) {
+            return new Ingredients(in);
+        }
+
+        @Override
+        public Ingredients[] newArray(int size) {
+            return new Ingredients[size];
+        }
+    };
     private Double quantity;
     private String measure;
     private String ingredient;
@@ -19,18 +30,6 @@ public class Ingredients implements Parcelable {
         measure = in.readString();
         ingredient = in.readString();
     }
-
-    public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
-        @Override
-        public Ingredients createFromParcel(Parcel in) {
-            return new Ingredients(in);
-        }
-
-        @Override
-        public Ingredients[] newArray(int size) {
-            return new Ingredients[size];
-        }
-    };
 
     public Double getQuantity() {
         return quantity;

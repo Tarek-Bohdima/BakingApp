@@ -16,10 +16,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     List<Steps> steps;
     OnStepClickListener mClickListener;
 
-    public interface OnStepClickListener {
-        void onStepClick(Steps steps);
-    }
-
     public StepsAdapter(List<Steps> steps, OnStepClickListener onStepClickListener) {
         this.steps = steps;
         this.mClickListener = onStepClickListener;
@@ -48,7 +44,11 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         notifyDataSetChanged();
     }
 
-    public static class StepsViewHolder extends RecyclerView.ViewHolder{
+    public interface OnStepClickListener {
+        void onStepClick(Steps steps);
+    }
+
+    public static class StepsViewHolder extends RecyclerView.ViewHolder {
 
         ItemStepBinding itemStepBinding;
 

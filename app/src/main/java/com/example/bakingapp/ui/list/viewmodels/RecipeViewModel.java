@@ -16,7 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class RecipeViewModel extends ViewModel {
 
     LiveData<List<Recipes>> recipesLivedata;
-    private Repository repository;
+    private final Repository repository;
 
 
     @Inject

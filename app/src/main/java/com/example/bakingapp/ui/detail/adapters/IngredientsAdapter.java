@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.bakingapp.databinding.ItemIngredientBinding;
 import com.example.bakingapp.model.Ingredients;
 
@@ -41,7 +40,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         notifyDataSetChanged();
     }
 
-    public static class IngredientsViewHolder extends RecyclerView.ViewHolder{
+    public static class IngredientsViewHolder extends RecyclerView.ViewHolder {
 
         ItemIngredientBinding itemIngredientBinding;
 

@@ -25,8 +25,8 @@ import timber.log.Timber;
 public class RecipesAdapter
         extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
 
-    private  List<Recipes> recipes;
     private final View.OnClickListener mOnClickListener = RecipesAdapter::onClick;
+    private List<Recipes> recipes;
 
     public RecipesAdapter(List<Recipes> recipes) {
         this.recipes = recipes;
@@ -62,7 +62,6 @@ public class RecipesAdapter
         holder.itemView.setTag(recipes.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
     }
-
 
 
     @Override

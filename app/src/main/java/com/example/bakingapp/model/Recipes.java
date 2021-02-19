@@ -6,6 +6,17 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class Recipes implements Parcelable {
+    public static final Creator<Recipes> CREATOR = new Creator<Recipes>() {
+        @Override
+        public Recipes createFromParcel(Parcel in) {
+            return new Recipes(in);
+        }
+
+        @Override
+        public Recipes[] newArray(int size) {
+            return new Recipes[size];
+        }
+    };
     private int id;
     private String name;
     private ArrayList<Ingredients> ingredients;
@@ -30,18 +41,6 @@ public class Recipes implements Parcelable {
         servings = in.readInt();
         image = in.readString();
     }
-
-    public static final Creator<Recipes> CREATOR = new Creator<Recipes>() {
-        @Override
-        public Recipes createFromParcel(Parcel in) {
-            return new Recipes(in);
-        }
-
-        @Override
-        public Recipes[] newArray(int size) {
-            return new Recipes[size];
-        }
-    };
 
     public int getId() {
         return id;

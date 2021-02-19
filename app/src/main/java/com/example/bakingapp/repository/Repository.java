@@ -22,14 +22,12 @@ import timber.log.Timber;
 public class Repository {
 
     private final RecipeApiService recipeApiService;
-    private final MutableLiveData<List<Recipes>> recipes;
-    private final CompositeDisposable compositeDisposable;
+    private final MutableLiveData<List<Recipes>> recipes = new MutableLiveData<>();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     public Repository(RecipeApiService recipeApiService) {
         this.recipeApiService = recipeApiService;
-        recipes = new MutableLiveData<>();
-        compositeDisposable = new CompositeDisposable();
     }
 
 
@@ -39,7 +37,7 @@ public class Repository {
                 .observeOn(AndroidSchedulers.mainThread());
 
         compositeDisposable.add(recipesListSingle
-                .subscribe(o -> recipes.postValue(o),
+                .subscribe(recipes::postValue,
                         e -> Timber.tag(Constants.TAG).d("Repository: getRecipes() called with: error = [" + e.getMessage() + "]")));
         return recipes;
     }

@@ -22,7 +22,7 @@ public class RetrofitModule {
 
     @Provides
     @Singleton
-    public  RecipeApiService provideRecipeApiService(GsonConverterFactory gsonConverterFactory){
+    public RecipeApiService provideRecipeApiService(GsonConverterFactory gsonConverterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(gsonConverterFactory)
