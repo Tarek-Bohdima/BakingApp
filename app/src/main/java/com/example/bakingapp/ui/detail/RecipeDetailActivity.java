@@ -11,10 +11,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
-import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.detail.fragments.StepDetailFragment;
-import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 import com.example.bakingapp.ui.list.RecipesActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -29,12 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class RecipeDetailActivity extends AppCompatActivity {
 
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
-
-    private RecipeDetailViewModel recipeDetailViewModel;
-
-    private Recipes currentRecipe;
-
-    private boolean mTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +74,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         .commit();
             }
         }
-        replaceFragment();
-    }
-
-    public void replaceFragment() {
-
     }
 
     @Override
@@ -104,17 +91,4 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    @Override
-//    public void onStepClick(Steps steps) {
-//        stepDetailFragment = StepDetailFragment.newInstance();
-//        if (mTwoPane) {
-//
-//        }else {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.item_detail_container,stepDetailFragment)
-//                    .addToBackStack(null)
-//                    .commit();
-//        }
-//    }
 }

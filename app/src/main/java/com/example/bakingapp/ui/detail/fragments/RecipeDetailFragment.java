@@ -49,7 +49,6 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
         fragmentRecipeDetailBinding = DataBindingUtil
                 .inflate(inflater,

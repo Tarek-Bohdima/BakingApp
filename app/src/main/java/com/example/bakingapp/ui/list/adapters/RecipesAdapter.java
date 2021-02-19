@@ -22,13 +22,13 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class RecipesRecyclerViewAdaper
-        extends RecyclerView.Adapter<RecipesRecyclerViewAdaper.ViewHolder> {
+public class RecipesAdapter
+        extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
 
-    private final List<Recipes> recipes;
-    private final View.OnClickListener mOnClickListener = RecipesRecyclerViewAdaper::onClick;
+    private  List<Recipes> recipes;
+    private final View.OnClickListener mOnClickListener = RecipesAdapter::onClick;
 
-    public RecipesRecyclerViewAdaper(List<Recipes> recipes) {
+    public RecipesAdapter(List<Recipes> recipes) {
         this.recipes = recipes;
     }
 
@@ -38,6 +38,11 @@ public class RecipesRecyclerViewAdaper
         Intent intent = new Intent(context, RecipeDetailActivity.class);
         intent.putExtra(RecipeDetailFragment.CURRENT_RECIPE, currentRecipe);
         context.startActivity(intent);
+    }
+
+    public void setData(List<Recipes> recipesData) {
+        recipes = recipesData;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -51,7 +56,7 @@ public class RecipesRecyclerViewAdaper
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mIdView.setText(recipes.get(position).getName());
         Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,
-                "aRecipesRecyclerViewAdaper: onBindViewHolder() called with: recipe's name = [%s]"
+                "RecipesAdapter: onBindViewHolder() called with: recipe's name = [%s]"
                 , recipes.get(position).getName()));
 
         holder.itemView.setTag(recipes.get(position));

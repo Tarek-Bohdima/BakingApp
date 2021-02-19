@@ -80,9 +80,9 @@ public class StepDetailFragment extends Fragment {
 
         RecipeDetailViewModel mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
         currentStep = mViewModel.getCurrentStep();
-        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: video url: " + currentStep.getVideoURL());
+        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: video url: %s", currentStep.getVideoURL());
         stepDescription.setText(currentStep.getDescription());
-        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: step description: " + currentStep.getDescription());
+        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: step description: %s", currentStep.getDescription());
         previousButton.setOnClickListener(StepDetailFragment::onPreviousBtnClick);
 
         nextButton.setOnClickListener(StepDetailFragment::onNextBtnClick);

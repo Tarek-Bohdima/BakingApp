@@ -2,17 +2,21 @@ package com.example.bakingapp.ui.list;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipesListBinding;
+import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.RecipeDetailActivity;
-import com.example.bakingapp.ui.list.adapters.RecipesRecyclerViewAdaper;
+import com.example.bakingapp.ui.list.adapters.RecipesAdapter;
 import com.example.bakingapp.ui.list.viewmodels.RecipeViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -25,14 +29,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class RecipesActivity extends AppCompatActivity {
 
+    private ActivityRecipesListBinding activityItemListBinding;
     private RecipeViewModel recipeViewModel;
+    private List<Recipes> recipesList = new ArrayList<>();
+    RecipesAdapter recipesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityRecipesListBinding activityItemListBinding =
-                DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
+
+        activityItemListBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
 
         activityItemListBinding.setLifecycleOwner(this);
 
@@ -42,13 +49,27 @@ public class RecipesActivity extends AppCompatActivity {
         recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
 
-        RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
-        setupRecyclerView(recyclerView);
+
+        setupRecyclerView();
+        recipeViewModel.getRecipesList().observe(this,
+                recipesData -> {
+                    recipesAdapter.setData(recipesData);
+                });
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recipeViewModel.getRecipesList().observe(this,
-                recipes -> recyclerView.setAdapter(new RecipesRecyclerViewAdaper(recipes)));
+    private void setupRecyclerView() {
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+
+        recipesAdapter = new RecipesAdapter(recipesList);
+
+        RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(recipesAdapter);
+
     }
 
 
