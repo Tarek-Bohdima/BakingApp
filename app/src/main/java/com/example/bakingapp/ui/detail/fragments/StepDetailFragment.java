@@ -80,7 +80,9 @@ public class StepDetailFragment extends Fragment {
 
         RecipeDetailViewModel mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
         currentStep = mViewModel.getCurrentStep();
+        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: video url: " + currentStep.getVideoURL());
         stepDescription.setText(currentStep.getDescription());
+        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: step description: " + currentStep.getDescription());
         previousButton.setOnClickListener(StepDetailFragment::onPreviousBtnClick);
 
         nextButton.setOnClickListener(StepDetailFragment::onNextBtnClick);
@@ -88,16 +90,13 @@ public class StepDetailFragment extends Fragment {
 
     private void initializePlayer() {
 
-        RecipeDetailViewModel mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-        currentStep = mViewModel.getCurrentStep();
         player = new SimpleExoPlayer.Builder(requireActivity()).build();
 
         playerView.setPlayer(player);
 
-        String uri = currentStep.getVideoUrl();
-        Timber.tag(Constants.TAG).d("StepDetailFragment: initializePlayer() called with video uri :  %s", uri);
-//        MediaItem mediaItem = MediaItem.fromUri(uri);
-        MediaItem mediaItem = MediaItem.fromUri("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4");
+        String uri = currentStep.getVideoURL();
+        MediaItem mediaItem = MediaItem.fromUri(uri);
+//        MediaItem mediaItem = MediaItem.fromUri("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4");
         player.setMediaItem(mediaItem);
 
         player.setPlayWhenReady(playWhenReady);

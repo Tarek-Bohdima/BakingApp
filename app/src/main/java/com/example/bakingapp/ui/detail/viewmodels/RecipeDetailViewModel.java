@@ -31,7 +31,7 @@ public class RecipeDetailViewModel extends ViewModel {
     public void setCurrentStep(Steps steps) {
 
         currentStep = steps;
-        Timber.tag(Constants.TAG).d("RecipeDetailViewModel: setCurrentStep() called with: steps = [" + steps + "]");
+        Timber.tag(Constants.TAG).d("RecipeDetailViewModel: setCurrentStep() called with: step video url = [" + steps.getVideoURL() + "]");
     }
 
     public Steps getCurrentStep() {

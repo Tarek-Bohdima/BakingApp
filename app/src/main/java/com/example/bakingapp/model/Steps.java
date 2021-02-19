@@ -20,15 +20,15 @@ public class Steps implements Parcelable {
     private int id;
     private String shortDescription;
     private String description;
-    private String videoUrl;
-    private String thumbnailUrl;
+    private String videoURL;
+    private String thumbnailURL;
 
-    public Steps(int id, String shortDescription, String description, String videoUrl, String thumbnailUrl) {
+    public Steps(int id, String shortDescription, String description, String videoURL, String thumbnailURL) {
         this.id = id;
         this.shortDescription = shortDescription;
         this.description = description;
-        this.videoUrl = videoUrl;
-        this.thumbnailUrl = thumbnailUrl;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
     }
 
 
@@ -56,28 +56,28 @@ public class Steps implements Parcelable {
         this.description = description;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getVideoURL() {
+        return videoURL;
     }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public String getThumbnailURL() {
+        return thumbnailURL;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
     }
 
     protected Steps(Parcel in) {
         id = in.readInt();
         shortDescription = in.readString();
         description = in.readString();
-        videoUrl = in.readString();
-        thumbnailUrl = in.readString();
+        videoURL = in.readString();
+        thumbnailURL = in.readString();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Steps implements Parcelable {
         dest.writeInt(id);
         dest.writeString(shortDescription);
         dest.writeString(description);
-        dest.writeString(videoUrl);
-        dest.writeString(thumbnailUrl);
+        dest.writeString(videoURL);
+        dest.writeString(thumbnailURL);
     }
 }

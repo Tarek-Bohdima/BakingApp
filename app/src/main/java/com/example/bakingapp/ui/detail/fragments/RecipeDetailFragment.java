@@ -22,6 +22,9 @@ import com.example.bakingapp.ui.detail.adapters.IngredientsAdapter;
 import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
 import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
@@ -30,10 +33,11 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
 
     public static final String CURRENT_RECIPE = "current_recipe";
     private Recipes currentRecipe;
-    private Steps currentStep;
+    private final List<Steps> stepsList = new ArrayList<>();
     private FragmentRecipeDetailBinding fragmentRecipeDetailBinding;
     private RecipeDetailViewModel mViewModel;
     private boolean mTwoPane;
+    private StepsAdapter stepsAdapter;
 
     public RecipeDetailFragment() {
     }
@@ -64,10 +68,13 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
         mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
         currentRecipe = mViewModel.getCurrentRecipe();
+        List<Steps> stepsData = mViewModel.getCurrentRecipe().getSteps();
+
 
         setupIngredientsRecyclerView();
 
         setupStepsRecyclerView();
+        stepsAdapter.setStepsData(stepsData);
 
     }
 
@@ -75,8 +82,8 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        StepsAdapter stepsAdapter = new StepsAdapter(currentRecipe.getSteps(), this);
-        stepsAdapter.setStepsData(currentRecipe.getSteps());
+
+        stepsAdapter = new StepsAdapter(stepsList, this);
 
         RecyclerView stepsRecyclerView = fragmentRecipeDetailBinding.stepsRecyclerview;
         stepsRecyclerView.setLayoutManager(layoutManager);
@@ -101,10 +108,12 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
 
     @Override
     public void onStepClick(Steps steps) {
-        String uri = steps.getVideoUrl();
-        Timber.tag(Constants.TAG).d("RecipeDetailFragment: onStepClick() called with: video uri = [" + uri + "]");
+
         StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
         mViewModel.setCurrentStep(steps);
+        String uri = steps.getVideoURL();
+        Timber.tag(Constants.TAG).d("RecipeDetailFragment: onStepClick() called with: video uri = [" + uri + "]");
+
         if (mTwoPane) {
 
         } else {
@@ -115,18 +124,4 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
                     .commit();
         }
     }
-
-//    @Override
-//    public void onStepClick(Steps steps) {
-//        mViewModel.setCurrentStep(steps);
-//        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
-//        if (mTwoPane) {
-//
-//        }else {
-//            getActivity().getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.item_detail_container,stepDetailFragment)
-//                    .addToBackStack(null)
-//                    .commit();
-//        }
-//    }
 }
