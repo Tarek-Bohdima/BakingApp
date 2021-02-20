@@ -16,6 +16,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     ItemIngredientBinding itemIngredientBinding;
     List<Ingredients> ingredients;
 
+    public IngredientsAdapter(List<Ingredients> ingredients) {
+        this.ingredients = ingredients;
+    }
 
     @NonNull
     @Override

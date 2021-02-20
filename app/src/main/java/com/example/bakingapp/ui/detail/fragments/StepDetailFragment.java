@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -57,6 +58,24 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // https://developer.android.com/guide/navigation/navigation-custom-back
+        // This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
+        // The callback can be enabled or disabled here or in handleOnBackPressed()
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
@@ -69,7 +88,6 @@ public class StepDetailFragment extends Fragment {
         nextButton = fragmentStepDetailBinding.nextStepButton;
         previousButton = fragmentStepDetailBinding.previousStepButton;
         playerView = fragmentStepDetailBinding.exoPlayerView;
-
 
         return fragmentStepDetailBinding.getRoot();
     }
@@ -96,7 +114,6 @@ public class StepDetailFragment extends Fragment {
 
         String uri = currentStep.getVideoURL();
         MediaItem mediaItem = MediaItem.fromUri(uri);
-//        MediaItem mediaItem = MediaItem.fromUri("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4");
         player.setMediaItem(mediaItem);
 
         player.setPlayWhenReady(playWhenReady);

@@ -1,6 +1,5 @@
 package com.example.bakingapp.ui.detail;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -37,7 +36,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         Toolbar toolbar = activityRecipeDetailBinding.detailToolbar;
         setSupportActionBar(toolbar);
-
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -86,7 +84,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, RecipesActivity.class));
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

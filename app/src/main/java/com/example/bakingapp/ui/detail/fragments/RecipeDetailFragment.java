@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentRecipeDetailBinding;
+import com.example.bakingapp.model.Ingredients;
 import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.model.Steps;
 import com.example.bakingapp.ui.detail.adapters.IngredientsAdapter;
@@ -33,11 +34,14 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
 
     public static final String CURRENT_RECIPE = "current_recipe";
     private final List<Steps> stepsList = new ArrayList<>();
-    private Recipes currentRecipe;
+    private final List<Ingredients> ingredientsList = new ArrayList<>();
     private FragmentRecipeDetailBinding fragmentRecipeDetailBinding;
     private RecipeDetailViewModel mViewModel;
     private boolean mTwoPane;
+    private IngredientsAdapter ingredientsAdapter;
     private StepsAdapter stepsAdapter;
+    private Recipes currentRecipe;
+    private List<Steps> stepsData;
 
     public RecipeDetailFragment() {
     }
@@ -50,14 +54,10 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        fragmentRecipeDetailBinding = DataBindingUtil
-                .inflate(inflater,
-                        R.layout.fragment_recipe_detail,
+        fragmentRecipeDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_detail,
                         container, false);
 
-
         return fragmentRecipeDetailBinding.getRoot();
-
     }
 
     @Override
@@ -65,22 +65,26 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         super.onViewCreated(view, savedInstanceState);
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
-        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-        currentRecipe = mViewModel.getCurrentRecipe();
-        List<Steps> stepsData = mViewModel.getCurrentRecipe().getSteps();
 
+        setupViewModel();
 
         setupIngredientsRecyclerView();
+        ingredientsAdapter.setIngredientsData(currentRecipe.getIngredients());
 
         setupStepsRecyclerView();
         stepsAdapter.setStepsData(stepsData);
+    }
 
+    private void setupViewModel() {
+        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
+
+        currentRecipe = mViewModel.getCurrentRecipe();
+        stepsData = mViewModel.getCurrentRecipe().getSteps();
     }
 
     private void setupStepsRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
 
         stepsAdapter = new StepsAdapter(stepsList, this);
 
@@ -91,27 +95,24 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     }
 
     private void setupIngredientsRecyclerView() {
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        IngredientsAdapter ingredientsAdapter = new IngredientsAdapter();
-        ingredientsAdapter.setIngredientsData(currentRecipe.getIngredients());
+        ingredientsAdapter = new IngredientsAdapter(ingredientsList);
 
         RecyclerView ingredientsRecyclerView = fragmentRecipeDetailBinding.ingredientsRecyclerview;
         ingredientsRecyclerView.setLayoutManager(layoutManager);
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
-
     }
 
     @Override
     public void onStepClick(Steps steps) {
-
         StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
         mViewModel.setCurrentStep(steps);
         String uri = steps.getVideoURL();
-        Timber.tag(Constants.TAG).d("RecipeDetailFragment: onStepClick() called with: video uri = [" + uri + "]");
+        Timber.tag(Constants.TAG)
+                .d("RecipeDetailFragment: onStepClick() called with: video uri = [" + uri + "]");
 
         if (mTwoPane) {
 
