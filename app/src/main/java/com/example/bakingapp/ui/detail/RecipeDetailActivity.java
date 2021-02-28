@@ -1,6 +1,35 @@
+/*
+ * MIT License
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * This project was submitted by Tarek Bohdima as part of the Android Developer
+ * Nanodegree At Udacity.
+ * As part of Udacity Honor code, your submissions must be your own work, hence
+ * submitting this project as yours will cause you to break the Udacity Honor Code
+ * and the suspension of your account.
+ * I, the author of the project, allow you to check the code as a reference, but if you
+ * submit it, it's your own responsibility if you get expelled.
+ */
+
 package com.example.bakingapp.ui.detail;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,11 +37,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
-import com.example.bakingapp.model.Recipes;
-import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.detail.fragments.StepDetailFragment;
 import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
@@ -27,15 +55,14 @@ import dagger.hilt.android.AndroidEntryPoint;
  * in a {@link RecipesActivity}.
  */
 @AndroidEntryPoint
-public class RecipeDetailActivity extends AppCompatActivity implements StepsAdapter.OnStepClickListener {
+public class RecipeDetailActivity extends AppCompatActivity {
 
+    public static final String STEP_DETAIL_PORTRAIT_FRAGMENT = "stepDetailPortraitFragment";
+    private final RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
+    private final StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
-
-    private RecipeDetailViewModel recipeDetailViewModel;
-
+    RecipeDetailViewModel recipeDetailViewModel;
     private boolean mTwoPane;
-
-    private Recipes currentRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +70,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
 
         activityRecipeDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_detail);
         activityRecipeDetailBinding.setLifecycleOwner(this);
+        recipeDetailViewModel = new ViewModelProvider(this).get(RecipeDetailViewModel.class);
 
         Toolbar toolbar = activityRecipeDetailBinding.detailToolbar;
         setSupportActionBar(toolbar);
-
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
@@ -66,23 +94,23 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-
-            RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, recipeDetailFragment)
-                    .commit();
-
+            makePortraitFragment();
             if (mTwoPane) {
-                StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
-//                stepDetailFragment.setArguments(arguments);
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.detail_steps_container, stepDetailFragment)
-                        .commit();
+                makeTabletFragment();
             }
         }
+    }
+
+    private void makeTabletFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.detail_steps_container, stepDetailFragment)
+                .commit();
+    }
+
+    private void makePortraitFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.item_detail_container, recipeDetailFragment, STEP_DETAIL_PORTRAIT_FRAGMENT)
+                .commit();
     }
 
     @Override
@@ -95,14 +123,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsAdap
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, RecipesActivity.class));
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStepClick(int position) {
-        
     }
 }
