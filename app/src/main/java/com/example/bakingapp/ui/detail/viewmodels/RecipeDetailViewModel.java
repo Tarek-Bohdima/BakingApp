@@ -30,41 +30,64 @@
 
 package com.example.bakingapp.ui.detail.viewmodels;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
-import com.example.bakingapp.Constants;
 import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.model.Steps;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import timber.log.Timber;
 
 @HiltViewModel
 public class RecipeDetailViewModel extends ViewModel {
 
     private final Recipes currentRecipe;
-    private Steps currentStep;
+    private final List<Steps> stepsList;
+    MutableLiveData<Integer> currentStepPosition;
 
     @Inject
     public RecipeDetailViewModel(SavedStateHandle stateHandle) {
         this.currentRecipe = stateHandle.get(RecipeDetailFragment.CURRENT_RECIPE);
+        stepsList = currentRecipe.getSteps();
+        currentStepPosition = new MutableLiveData<>();
+    }
+
+    public List<Steps> getStepsList() {
+        return stepsList;
+    }
+
+    public LiveData<Integer> getCurrentStepPosition() {
+        return this.currentStepPosition;
+    }
+
+    public void setCurrentStepPosition(int currentStepPosition) {
+        this.currentStepPosition.setValue(currentStepPosition);
+    }
+
+    public void nextStep() {
+        setCurrentStepPosition(getCurrentStepPosition().getValue() + 1);
+    }
+
+    public void previousStep() {
+        setCurrentStepPosition(getCurrentStepPosition().getValue() - 1);
     }
 
     public Recipes getCurrentRecipe() {
         return currentRecipe;
     }
 
-    public Steps getCurrentStep() {
-        return currentStep;
+    public boolean hasNext() {
+        return getCurrentStepPosition().getValue() < (stepsList.size() - 1);
     }
 
-    public void setCurrentStep(Steps steps) {
-
-        currentStep = steps;
-        Timber.tag(Constants.TAG).d("RecipeDetailViewModel: setCurrentStep() called with: step video url = [" + steps.getVideoURL() + "]");
+    public boolean hasPrevious() {
+        return getCurrentStepPosition().getValue() > 0;
     }
 }

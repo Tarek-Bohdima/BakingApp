@@ -59,25 +59,19 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class RecipesActivity extends AppCompatActivity {
 
+    private final List<Recipes> recipesList = new ArrayList<>();
     RecipesAdapter recipesAdapter;
     private ActivityRecipesListBinding activityItemListBinding;
-    private final List<Recipes> recipesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         activityItemListBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
-
         activityItemListBinding.setLifecycleOwner(this);
-
         setSupportActionBar(activityItemListBinding.toolbar);
         activityItemListBinding.toolbar.setTitle(getTitle());
-
         RecipeViewModel recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
-
-
         setupRecyclerView();
         recipeViewModel.getRecipesList().observe(this,
                 recipesData -> recipesAdapter.setData(recipesData));
@@ -87,16 +81,11 @@ public class RecipesActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-
         recipesAdapter = new RecipesAdapter(recipesList);
-
         RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
-
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recipesAdapter);
 
     }
-
-
 }

@@ -85,7 +85,7 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
                              @Nullable Bundle savedInstanceState) {
 
         fragmentRecipeDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipe_detail,
-                        container, false);
+                container, false);
 
         return fragmentRecipeDetailBinding.getRoot();
     }
@@ -95,19 +95,16 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         super.onViewCreated(view, savedInstanceState);
 
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
-
         setupViewModel();
-
         setupIngredientsRecyclerView();
         ingredientsAdapter.setIngredientsData(currentRecipe.getIngredients());
-
         setupStepsRecyclerView();
         stepsAdapter.setStepsData(stepsData);
+
     }
 
     private void setupViewModel() {
         mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-
         currentRecipe = mViewModel.getCurrentRecipe();
         stepsData = mViewModel.getCurrentRecipe().getSteps();
     }
@@ -115,9 +112,7 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     private void setupStepsRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
         stepsAdapter = new StepsAdapter(stepsList, this);
-
         RecyclerView stepsRecyclerView = fragmentRecipeDetailBinding.stepsRecyclerview;
         stepsRecyclerView.setLayoutManager(layoutManager);
         stepsRecyclerView.setHasFixedSize(true);
@@ -127,9 +122,7 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     private void setupIngredientsRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
         ingredientsAdapter = new IngredientsAdapter(ingredientsList);
-
         RecyclerView ingredientsRecyclerView = fragmentRecipeDetailBinding.ingredientsRecyclerview;
         ingredientsRecyclerView.setLayoutManager(layoutManager);
         ingredientsRecyclerView.setHasFixedSize(true);
@@ -139,13 +132,16 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     @Override
     public void onStepClick(Steps steps) {
         StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
-        mViewModel.setCurrentStep(steps);
+        int currentStepPosition = steps.getId();
+        mViewModel.setCurrentStepPosition(currentStepPosition);
         String uri = steps.getVideoURL();
         Timber.tag(Constants.TAG)
                 .d("RecipeDetailFragment: onStepClick() called with: video uri = [" + uri + "]");
 
         if (mTwoPane) {
-
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .add(R.id.detail_steps_container, stepDetailFragment)
+                    .commit();
         } else {
             getActivity().getSupportFragmentManager()
                     .beginTransaction()

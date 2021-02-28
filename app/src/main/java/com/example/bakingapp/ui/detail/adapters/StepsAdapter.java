@@ -44,6 +44,7 @@ import java.util.List;
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
     ItemStepBinding itemStepBinding;
     List<Steps> steps;
+    int position;
     OnStepClickListener mClickListener;
 
     public StepsAdapter(List<Steps> steps, OnStepClickListener onStepClickListener) {
@@ -69,6 +70,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         return steps == null ? 0 : steps.size();
     }
 
+//    public int getStepAdapterPosition() {
+//        return itemStepBinding.getPosition();
+//    }
+
     public void setStepsData(List<Steps> stepsData) {
         steps = stepsData;
         notifyDataSetChanged();
@@ -91,6 +96,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             itemStepBinding.stepShortDescription.setText(steps.getShortDescription());
             itemStepBinding.setStep(steps);
             itemStepBinding.setStepItemClick(mClickListener);
+//            itemStepBinding.setPosition(position);
             itemStepBinding.executePendingBindings();
         }
     }

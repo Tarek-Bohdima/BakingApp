@@ -30,29 +30,37 @@
 
 package com.example.bakingapp.ui.detail.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentStepDetailBinding;
 import com.example.bakingapp.model.Steps;
+import com.example.bakingapp.ui.detail.RecipeDetailActivity;
 import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
+
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
@@ -60,13 +68,16 @@ import timber.log.Timber;
 @AndroidEntryPoint
 public class StepDetailFragment extends Fragment {
 
+    private FragmentStepDetailBinding fragmentStepDetailBinding;
+    private RecipeDetailViewModel mViewModel;
+    private LiveData<Integer> currentStepPosition;
+    private TextView stepDescription;
     private Steps currentStep;
     private PlayerView playerView;
-    private TextView stepDescription;
+    private List<Steps> currentStepList;
     private Button nextButton;
     private Button previousButton;
     private SimpleExoPlayer player;
-
     private boolean playWhenReady = true;
     private int currentWindow = 0;
     private long playbackPosition = 0;
@@ -75,22 +86,14 @@ public class StepDetailFragment extends Fragment {
     }
 
     public static StepDetailFragment newInstance() {
-
         return new StepDetailFragment();
-    }
-
-    private static void onNextBtnClick(View v) {
-
-    }
-
-    private static void onPreviousBtnClick(View v) {
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Timber.tag(Constants.TAG).d("StepDetailFragment: onCreate() called ..............");
         // https://developer.android.com/guide/navigation/navigation-custom-back
         // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -105,50 +108,128 @@ public class StepDetailFragment extends Fragment {
         // The callback can be enabled or disabled here or in handleOnBackPressed()
     }
 
+    // The onCreateView method is called when Fragment should create its View object hierarchy,
+    // either dynamically or via XML layout inflation.
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        FragmentStepDetailBinding fragmentStepDetailBinding = DataBindingUtil
+        Timber.tag(Constants.TAG).d("StepDetailFragment: onCreateView() called ......... ");
+        fragmentStepDetailBinding = DataBindingUtil
                 .inflate(inflater,
                         R.layout.fragment_step_detail,
                         container, false);
 
-        stepDescription = fragmentStepDetailBinding.stepDescription;
-        nextButton = fragmentStepDetailBinding.nextStepButton;
-        previousButton = fragmentStepDetailBinding.previousStepButton;
-        playerView = fragmentStepDetailBinding.exoPlayerView;
-
         return fragmentStepDetailBinding.getRoot();
     }
 
+    // This event is triggered soon after onCreateView().
+    // onViewCreated() is only called if the view returned from onCreateView() is non-null.
+    // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecipeDetailViewModel mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-        currentStep = mViewModel.getCurrentStep();
-        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: video url: %s", currentStep.getVideoURL());
-        stepDescription.setText(currentStep.getDescription());
-        Timber.tag(Constants.TAG).d("StepDetailFragment: onViewCreated() called with: step description: %s", currentStep.getDescription());
-        previousButton.setOnClickListener(StepDetailFragment::onPreviousBtnClick);
-
-        nextButton.setOnClickListener(StepDetailFragment::onNextBtnClick);
+        initializeVariables();
+        observeCurrentStepPosition();
     }
+
+    private void observeCurrentStepPosition() {
+        currentStepPosition.observe(getViewLifecycleOwner(), this::onChanged);
+    }
+
+    private void onChanged(Integer integer) {
+        currentStep = currentStepList.get(integer);
+        stepDescription.setText(currentStep.getDescription());
+        previousButton.setOnClickListener(this::onClick);
+        nextButton.setOnClickListener(this::onClick2);
+    }
+
+    private void onClick(View v) {
+        if (mViewModel.hasPrevious()) {
+            enableButton(previousButton, nextButton);
+            mViewModel.previousStep();
+            reAttachFragment();
+        } else {
+            previousButton.setClickable(false);
+            previousButton.setBackgroundColor(Color.GRAY);
+            Toast.makeText(requireActivity(),
+                    "Beginning of Steps", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void onClick2(View v) {
+        if (mViewModel.hasNext()) {
+            enableButton(nextButton, previousButton);
+            mViewModel.nextStep();
+            releasePlayer();
+            reAttachFragment();
+        } else {
+            nextButton.setClickable(false);
+            nextButton.setBackgroundColor(Color.GRAY);
+            Toast.makeText(requireActivity(),
+                    "End of Steps", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static void enableButton(Button currentButton, Button otherButton) {
+        currentButton.setClickable(true);
+        currentButton.setBackgroundColor(Color.BLUE);
+        otherButton.setBackgroundColor(Color.BLUE);
+    }
+
+    private void initializeVariables() {
+        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
+        stepDescription = fragmentStepDetailBinding.stepDescription;
+        nextButton = fragmentStepDetailBinding.nextStepButton;
+        previousButton = fragmentStepDetailBinding.previousStepButton;
+        playerView = fragmentStepDetailBinding.exoPlayerView;
+        currentStepPosition = mViewModel.getCurrentStepPosition();
+        currentStepList = mViewModel.getStepsList();
+        currentStep = currentStepList.get(currentStepPosition.getValue());
+        stepDescription.setText(currentStep.getDescription());
+    }
+
+    private void reAttachFragment() {
+        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
+        Fragment currentFragment = requireActivity().getSupportFragmentManager().findFragmentByTag(RecipeDetailActivity.STEP_DETAIL_PORTRAIT_FRAGMENT);
+        FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(currentFragment);
+        fragmentTransaction.add(R.id.item_detail_container, stepDetailFragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        releasePlayer();
+        stepDescription = null;
+        fragmentStepDetailBinding = null;
+        mViewModel = null;
+    }
+
+    // This method is called after the parent Activity's onCreate() method has completed.
+    // Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
+    // At this point, it is safe to search for activity View objects by their ID, for example.
+   /* @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }*/
 
     private void initializePlayer() {
 
         player = new SimpleExoPlayer.Builder(requireActivity()).build();
-
         playerView.setPlayer(player);
-
         String uri = currentStep.getVideoURL();
-        MediaItem mediaItem = MediaItem.fromUri(uri);
-        player.setMediaItem(mediaItem);
-
-        player.setPlayWhenReady(playWhenReady);
-        player.seekTo(currentWindow, playbackPosition);
-        player.prepare();
+        if (TextUtils.isEmpty(uri)) {
+            player.stop(true);
+        }else{
+            MediaItem mediaItem = MediaItem.fromUri(uri);
+            player.setMediaItem(mediaItem);
+            player.setPlayWhenReady(playWhenReady);
+            player.seekTo(currentWindow, playbackPosition);
+            player.prepare();
+        }
     }
 
     @Override
