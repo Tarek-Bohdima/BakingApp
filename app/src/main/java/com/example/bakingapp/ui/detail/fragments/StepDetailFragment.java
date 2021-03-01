@@ -37,15 +37,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -53,7 +54,6 @@ import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentStepDetailBinding;
 import com.example.bakingapp.model.Steps;
-import com.example.bakingapp.ui.detail.RecipeDetailActivity;
 import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -78,6 +78,7 @@ public class StepDetailFragment extends Fragment {
     private Button nextButton;
     private Button previousButton;
     private SimpleExoPlayer player;
+    private ImageView placeholder;
     private boolean playWhenReady = true;
     private int currentWindow = 0;
     private long playbackPosition = 0;
@@ -149,7 +150,8 @@ public class StepDetailFragment extends Fragment {
         if (mViewModel.hasPrevious()) {
             enableButton(previousButton, nextButton);
             mViewModel.previousStep();
-            reAttachFragment();
+            releasePlayer();
+            initializePlayer();
         } else {
             previousButton.setClickable(false);
             previousButton.setBackgroundColor(Color.GRAY);
@@ -163,7 +165,7 @@ public class StepDetailFragment extends Fragment {
             enableButton(nextButton, previousButton);
             mViewModel.nextStep();
             releasePlayer();
-            reAttachFragment();
+            initializePlayer();
         } else {
             nextButton.setClickable(false);
             nextButton.setBackgroundColor(Color.GRAY);
@@ -184,28 +186,11 @@ public class StepDetailFragment extends Fragment {
         nextButton = fragmentStepDetailBinding.nextStepButton;
         previousButton = fragmentStepDetailBinding.previousStepButton;
         playerView = fragmentStepDetailBinding.exoPlayerView;
+        placeholder = fragmentStepDetailBinding.placeholder;
         currentStepPosition = mViewModel.getCurrentStepPosition();
         currentStepList = mViewModel.getStepsList();
         currentStep = currentStepList.get(currentStepPosition.getValue());
         stepDescription.setText(currentStep.getDescription());
-    }
-
-    private void reAttachFragment() {
-        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
-        Fragment currentFragment = requireActivity().getSupportFragmentManager().findFragmentByTag(RecipeDetailActivity.STEP_DETAIL_PORTRAIT_FRAGMENT);
-        FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(currentFragment);
-        fragmentTransaction.add(R.id.item_detail_container, stepDetailFragment);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        releasePlayer();
-        stepDescription = null;
-        fragmentStepDetailBinding = null;
-        mViewModel = null;
     }
 
     // This method is called after the parent Activity's onCreate() method has completed.
@@ -222,8 +207,12 @@ public class StepDetailFragment extends Fragment {
         playerView.setPlayer(player);
         String uri = currentStep.getVideoURL();
         if (TextUtils.isEmpty(uri)) {
-            player.stop(true);
+            playerView.setVisibility(View.INVISIBLE);
+            placeholder.setVisibility(View.VISIBLE);
+            placeholder.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.no_video_available, null));
         }else{
+            placeholder.setVisibility(View.INVISIBLE);
+            playerView.setVisibility(View.VISIBLE);
             MediaItem mediaItem = MediaItem.fromUri(uri);
             player.setMediaItem(mediaItem);
             player.setPlayWhenReady(playWhenReady);

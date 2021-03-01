@@ -43,7 +43,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentRecipeDetailBinding;
 import com.example.bakingapp.model.Ingredients;
@@ -57,7 +56,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import timber.log.Timber;
 
 @AndroidEntryPoint
 public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnStepClickListener {
@@ -134,16 +132,13 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
         int currentStepPosition = steps.getId();
         mViewModel.setCurrentStepPosition(currentStepPosition);
-        String uri = steps.getVideoURL();
-        Timber.tag(Constants.TAG)
-                .d("RecipeDetailFragment: onStepClick() called with: video uri = [" + uri + "]");
 
         if (mTwoPane) {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .add(R.id.detail_steps_container, stepDetailFragment)
                     .commit();
         } else {
-            getActivity().getSupportFragmentManager()
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.item_detail_container, stepDetailFragment)
                     .addToBackStack(null)
