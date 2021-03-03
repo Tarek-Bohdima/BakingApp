@@ -72,8 +72,6 @@ public class StepDetailFragment extends Fragment {
     private boolean isLandscape;
     private RecipeDetailViewModel mViewModel;
     private int currentStepPosition;
-    private String currentStepDescripton;
-    private TextView stepDescription;
     private Steps currentStep;
     private PlayerView playerView;
     private List<Steps> currentStepList;
@@ -162,11 +160,12 @@ public class StepDetailFragment extends Fragment {
             currentStepPosition = currentStep.getId();
             playerView = fragmentStepDetailBinding.exoPlayerView;
             placeholder = fragmentStepDetailBinding.placeholder;
-            stepDescription = fragmentStepDetailBinding.stepDescription;
+            TextView stepDescription = fragmentStepDetailBinding.stepDescription;
             previousButton = fragmentStepDetailBinding.previousStepButton;
             nextButton = fragmentStepDetailBinding.nextStepButton;
-            currentStepDescripton = currentStep.getDescription();
-            stepDescription.setText(currentStepDescripton);
+            String currentStepDescription = currentStep.getDescription();
+            assert stepDescription != null;
+            stepDescription.setText(currentStepDescription);
             previousButton.setOnClickListener(this::onClick);
             nextButton.setOnClickListener(this::onClick2);
         }
