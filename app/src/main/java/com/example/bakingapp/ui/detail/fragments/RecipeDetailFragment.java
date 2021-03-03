@@ -112,9 +112,11 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         stepsAdapter = new StepsAdapter(stepsList, this);
         RecyclerView stepsRecyclerView = fragmentRecipeDetailBinding.stepsRecyclerview;
+        stepsRecyclerView.setNestedScrollingEnabled(false);
         stepsRecyclerView.setLayoutManager(layoutManager);
         stepsRecyclerView.setHasFixedSize(true);
         stepsRecyclerView.setAdapter(stepsAdapter);
+
     }
 
     private void setupIngredientsRecyclerView() {
@@ -122,6 +124,7 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ingredientsAdapter = new IngredientsAdapter(ingredientsList);
         RecyclerView ingredientsRecyclerView = fragmentRecipeDetailBinding.ingredientsRecyclerview;
+        ingredientsRecyclerView.setNestedScrollingEnabled(false);
         ingredientsRecyclerView.setLayoutManager(layoutManager);
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
@@ -130,8 +133,7 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     @Override
     public void onStepClick(Steps steps) {
         StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
-//        mViewModel.getCurrentStep().setValue(steps);
-        mViewModel.setInitStep(steps);
+        mViewModel.getCurrentStep().setValue(steps);
         if (mTwoPane) {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .add(R.id.detail_steps_container, stepDetailFragment)

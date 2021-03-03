@@ -50,7 +50,6 @@ public class RecipeDetailViewModel extends ViewModel {
     private final Recipes currentRecipe;
     private final List<Steps> stepsList;
     private MutableLiveData<Steps> currentStep;
-    private Steps initialStep;
 
     @Inject
     public RecipeDetailViewModel(SavedStateHandle stateHandle) {
@@ -72,13 +71,5 @@ public class RecipeDetailViewModel extends ViewModel {
             currentStep = new MutableLiveData<>();
         }
         return currentStep;
-    }
-
-    public void setInitStep(Steps steps) {
-        initialStep = steps;
-    }
-
-    public Steps getInitialStep() {
-        return initialStep;
     }
 }

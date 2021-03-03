@@ -68,6 +68,7 @@
             android:contentDescription="@string/place_holder_image"
             android:scaleType="centerCrop"
             android:visibility="invisible"
+            app:srcCompat="@drawable/no_video_available"
             app:layout_constraintBottom_toTopOf="@+id/step_description"
             app:layout_constraintEnd_toEndOf="@+id/exo_player_view"
             app:layout_constraintStart_toStartOf="parent"

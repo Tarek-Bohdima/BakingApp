@@ -96,7 +96,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             itemStepBinding.stepShortDescription.setText(steps.getShortDescription());
             itemStepBinding.setStep(steps);
             itemStepBinding.setStepItemClick(mClickListener);
-//            itemStepBinding.setPosition(position);
             itemStepBinding.executePendingBindings();
         }
     }
