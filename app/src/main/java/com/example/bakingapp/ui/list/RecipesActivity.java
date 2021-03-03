@@ -80,10 +80,10 @@ public class RecipesActivity extends AppCompatActivity {
     private void setupRecyclerView() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+
         recipesAdapter = new RecipesAdapter(recipesList);
         RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
-        recyclerView.setLayoutManager(linearLayoutManager);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recipesAdapter);
 

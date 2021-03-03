@@ -30,7 +30,6 @@
 
 package com.example.bakingapp.ui.detail.viewmodels;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
@@ -50,44 +49,36 @@ public class RecipeDetailViewModel extends ViewModel {
 
     private final Recipes currentRecipe;
     private final List<Steps> stepsList;
-    MutableLiveData<Integer> currentStepPosition;
+    private MutableLiveData<Steps> currentStep;
+    private Steps initialStep;
 
     @Inject
     public RecipeDetailViewModel(SavedStateHandle stateHandle) {
         this.currentRecipe = stateHandle.get(RecipeDetailFragment.CURRENT_RECIPE);
+        assert currentRecipe != null;
         stepsList = currentRecipe.getSteps();
-        currentStepPosition = new MutableLiveData<>();
-    }
-
-    public List<Steps> getStepsList() {
-        return stepsList;
-    }
-
-    public LiveData<Integer> getCurrentStepPosition() {
-        return this.currentStepPosition;
-    }
-
-    public void setCurrentStepPosition(int currentStepPosition) {
-        this.currentStepPosition.setValue(currentStepPosition);
-    }
-
-    public void nextStep() {
-        setCurrentStepPosition(getCurrentStepPosition().getValue() + 1);
-    }
-
-    public void previousStep() {
-        setCurrentStepPosition(getCurrentStepPosition().getValue() - 1);
     }
 
     public Recipes getCurrentRecipe() {
         return currentRecipe;
     }
 
-    public boolean hasNext() {
-        return getCurrentStepPosition().getValue() < (stepsList.size() - 1);
+    public List<Steps> getStepsList() {
+        return stepsList;
     }
 
-    public boolean hasPrevious() {
-        return getCurrentStepPosition().getValue() > 0;
+    public MutableLiveData<Steps> getCurrentStep() {
+        if (currentStep == null) {
+            currentStep = new MutableLiveData<>();
+        }
+        return currentStep;
+    }
+
+    public void setInitStep(Steps steps) {
+        initialStep = steps;
+    }
+
+    public Steps getInitialStep() {
+        return initialStep;
     }
 }

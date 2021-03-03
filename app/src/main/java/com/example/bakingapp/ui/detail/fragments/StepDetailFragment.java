@@ -47,7 +47,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bakingapp.Constants;
@@ -70,7 +70,8 @@ public class StepDetailFragment extends Fragment {
 
     private FragmentStepDetailBinding fragmentStepDetailBinding;
     private RecipeDetailViewModel mViewModel;
-    private LiveData<Integer> currentStepPosition;
+    private int currentStepPosition;
+    private String currentStepDescripton;
     private TextView stepDescription;
     private Steps currentStep;
     private PlayerView playerView;
@@ -132,52 +133,54 @@ public class StepDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         initializeVariables();
-        observeCurrentStepPosition();
-    }
+//        observeCurrentStepPosition();
+        mViewModel.getCurrentStep().observe(getViewLifecycleOwner(), new Observer<Steps>() {
+            @Override
+            public void onChanged(Steps steps) {
+                currentStep = steps;
+                currentStepDescripton = currentStep.getDescription();
+                currentStepPosition = currentStep.getId();
+                stepDescription.setText(currentStepDescripton);
+                initializePlayer();
+            }
+        });
 
-    private void observeCurrentStepPosition() {
-        currentStepPosition.observe(getViewLifecycleOwner(), this::onChanged);
-    }
-
-    private void onChanged(Integer integer) {
-        currentStep = currentStepList.get(integer);
-        stepDescription.setText(currentStep.getDescription());
         previousButton.setOnClickListener(this::onClick);
         nextButton.setOnClickListener(this::onClick2);
     }
 
     private void onClick(View v) {
-        if (mViewModel.hasPrevious()) {
-            enableButton(previousButton, nextButton);
-            mViewModel.previousStep();
-            releasePlayer();
-            initializePlayer();
+        if (currentStepPosition > 0) {
+            enableButton(nextButton);
+            stopPlayer();
+            Steps newStep = currentStepList.get(currentStepPosition - 1);
+            mViewModel.getCurrentStep().setValue(newStep);
         } else {
-            previousButton.setClickable(false);
-            previousButton.setBackgroundColor(Color.GRAY);
-            Toast.makeText(requireActivity(),
-                    "Beginning of Steps", Toast.LENGTH_SHORT).show();
+            disableButton(previousButton);
+            Toast.makeText(requireActivity(), "Beginning of Steps", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void onClick2(View v) {
-        if (mViewModel.hasNext()) {
-            enableButton(nextButton, previousButton);
-            mViewModel.nextStep();
-            releasePlayer();
-            initializePlayer();
+        if (currentStepPosition < currentStepList.size() - 1) {
+            enableButton(previousButton);
+            stopPlayer();
+            Steps newStep = currentStepList.get(currentStepPosition + 1);
+            mViewModel.getCurrentStep().setValue(newStep);
         } else {
-            nextButton.setClickable(false);
-            nextButton.setBackgroundColor(Color.GRAY);
-            Toast.makeText(requireActivity(),
-                    "End of Steps", Toast.LENGTH_SHORT).show();
+            disableButton(nextButton);
+            Toast.makeText(requireActivity(), "End of Steps", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private static void enableButton(Button currentButton, Button otherButton) {
+    private void enableButton(Button currentButton) {
         currentButton.setClickable(true);
         currentButton.setBackgroundColor(Color.BLUE);
-        otherButton.setBackgroundColor(Color.BLUE);
+    }
+
+    private void disableButton(Button currentButton) {
+        currentButton.setClickable(false);
+        currentButton.setBackgroundColor(Color.GRAY);
     }
 
     private void initializeVariables() {
@@ -187,19 +190,12 @@ public class StepDetailFragment extends Fragment {
         previousButton = fragmentStepDetailBinding.previousStepButton;
         playerView = fragmentStepDetailBinding.exoPlayerView;
         placeholder = fragmentStepDetailBinding.placeholder;
-        currentStepPosition = mViewModel.getCurrentStepPosition();
         currentStepList = mViewModel.getStepsList();
-        currentStep = currentStepList.get(currentStepPosition.getValue());
-        stepDescription.setText(currentStep.getDescription());
+        currentStep = mViewModel.getInitialStep();
+        currentStepDescripton = currentStep.getDescription();
+        currentStepPosition = currentStep.getId();
+        stepDescription.setText(currentStepDescripton);
     }
-
-    // This method is called after the parent Activity's onCreate() method has completed.
-    // Accessing the view hierarchy of the parent activity must be done in the onActivityCreated.
-    // At this point, it is safe to search for activity View objects by their ID, for example.
-   /* @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }*/
 
     private void initializePlayer() {
 
@@ -207,18 +203,26 @@ public class StepDetailFragment extends Fragment {
         playerView.setPlayer(player);
         String uri = currentStep.getVideoURL();
         if (TextUtils.isEmpty(uri)) {
-            playerView.setVisibility(View.INVISIBLE);
-            placeholder.setVisibility(View.VISIBLE);
-            placeholder.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.no_video_available, null));
+            hidePlayer();
         }else{
-            placeholder.setVisibility(View.INVISIBLE);
-            playerView.setVisibility(View.VISIBLE);
+            showPlayer();
             MediaItem mediaItem = MediaItem.fromUri(uri);
             player.setMediaItem(mediaItem);
             player.setPlayWhenReady(playWhenReady);
             player.seekTo(currentWindow, playbackPosition);
             player.prepare();
         }
+    }
+
+    private void showPlayer() {
+        placeholder.setVisibility(View.INVISIBLE);
+        playerView.setVisibility(View.VISIBLE);
+    }
+
+    private void hidePlayer() {
+        playerView.setVisibility(View.INVISIBLE);
+        placeholder.setVisibility(View.VISIBLE);
+        placeholder.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.no_video_available, null));
     }
 
     @Override
@@ -258,6 +262,13 @@ public class StepDetailFragment extends Fragment {
             playWhenReady = player.getPlayWhenReady();
             playbackPosition = player.getCurrentPosition();
             currentWindow = player.getCurrentWindowIndex();
+            player.release();
+            player = null;
+        }
+    }
+
+    private void stopPlayer() {
+        if (player != null) {
             player.release();
             player = null;
         }
