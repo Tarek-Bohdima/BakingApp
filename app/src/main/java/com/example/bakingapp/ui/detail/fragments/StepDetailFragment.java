@@ -30,6 +30,7 @@
 
 package com.example.bakingapp.ui.detail.fragments;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -44,10 +45,8 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bakingapp.Constants;
@@ -69,6 +68,8 @@ import timber.log.Timber;
 public class StepDetailFragment extends Fragment {
 
     private FragmentStepDetailBinding fragmentStepDetailBinding;
+    private boolean mTwoPane;
+    private boolean isLandscape;
     private RecipeDetailViewModel mViewModel;
     private int currentStepPosition;
     private String currentStepDescripton;
@@ -132,21 +133,43 @@ public class StepDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initializeVariables();
-//        observeCurrentStepPosition();
-        mViewModel.getCurrentStep().observe(getViewLifecycleOwner(), new Observer<Steps>() {
-            @Override
-            public void onChanged(Steps steps) {
-                currentStep = steps;
-                currentStepDescripton = currentStep.getDescription();
-                currentStepPosition = currentStep.getId();
-                stepDescription.setText(currentStepDescripton);
-                initializePlayer();
-            }
-        });
+        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        initializeVariables(mViewModel.getCurrentStep().getValue());
+        observeCurrentStep();
+    }
 
-        previousButton.setOnClickListener(this::onClick);
-        nextButton.setOnClickListener(this::onClick2);
+    private void observeCurrentStep() {
+        mViewModel.getCurrentStep().observe(getViewLifecycleOwner(), steps -> {
+            initializeVariables(steps);
+            releasePlayer();
+            initializePlayer();
+        });
+    }
+
+    private void initializeVariables(Steps steps) {
+
+        if (isLandscape) {
+            currentStepList = mViewModel.getStepsList();
+            currentStep = steps;
+            currentStepPosition = currentStep.getId();
+            playerView = fragmentStepDetailBinding.exoPlayerView;
+            placeholder = fragmentStepDetailBinding.placeholder;
+        } else {
+            currentStepList = mViewModel.getStepsList();
+            currentStep = steps;
+            currentStepPosition = currentStep.getId();
+            playerView = fragmentStepDetailBinding.exoPlayerView;
+            placeholder = fragmentStepDetailBinding.placeholder;
+            stepDescription = fragmentStepDetailBinding.stepDescription;
+            previousButton = fragmentStepDetailBinding.previousStepButton;
+            nextButton = fragmentStepDetailBinding.nextStepButton;
+            currentStepDescripton = currentStep.getDescription();
+            stepDescription.setText(currentStepDescripton);
+            previousButton.setOnClickListener(this::onClick);
+            nextButton.setOnClickListener(this::onClick2);
+        }
     }
 
     private void onClick(View v) {
@@ -183,29 +206,14 @@ public class StepDetailFragment extends Fragment {
         currentButton.setBackgroundColor(Color.GRAY);
     }
 
-    private void initializeVariables() {
-        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-        stepDescription = fragmentStepDetailBinding.stepDescription;
-        nextButton = fragmentStepDetailBinding.nextStepButton;
-        previousButton = fragmentStepDetailBinding.previousStepButton;
-        playerView = fragmentStepDetailBinding.exoPlayerView;
-        placeholder = fragmentStepDetailBinding.placeholder;
-        currentStepList = mViewModel.getStepsList();
-        currentStep = mViewModel.getInitialStep();
-        currentStepDescripton = currentStep.getDescription();
-        currentStepPosition = currentStep.getId();
-        stepDescription.setText(currentStepDescripton);
-    }
-
     private void initializePlayer() {
-
-        player = new SimpleExoPlayer.Builder(requireActivity()).build();
-        playerView.setPlayer(player);
         String uri = currentStep.getVideoURL();
         if (TextUtils.isEmpty(uri)) {
             hidePlayer();
-        }else{
+        } else {
             showPlayer();
+            player = new SimpleExoPlayer.Builder(requireActivity()).build();
+            playerView.setPlayer(player);
             MediaItem mediaItem = MediaItem.fromUri(uri);
             player.setMediaItem(mediaItem);
             player.setPlayWhenReady(playWhenReady);
@@ -222,7 +230,7 @@ public class StepDetailFragment extends Fragment {
     private void hidePlayer() {
         playerView.setVisibility(View.INVISIBLE);
         placeholder.setVisibility(View.VISIBLE);
-        placeholder.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.no_video_available, null));
+        releasePlayer();
     }
 
     @Override
