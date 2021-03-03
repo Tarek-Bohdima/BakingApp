@@ -148,12 +148,14 @@ public class StepDetailFragment extends Fragment {
 
     private void initializeVariables(Steps steps) {
 
-        if (isLandscape) {
+        if (isLandscape && !mTwoPane) {
             currentStepList = mViewModel.getStepsList();
             currentStep = steps;
             currentStepPosition = currentStep.getId();
             playerView = fragmentStepDetailBinding.exoPlayerView;
             placeholder = fragmentStepDetailBinding.placeholder;
+        } else if (mTwoPane) {
+
         } else {
             currentStepList = mViewModel.getStepsList();
             currentStep = steps;
