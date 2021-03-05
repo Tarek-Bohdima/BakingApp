@@ -37,6 +37,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bakingapp.R;
@@ -57,12 +59,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class RecipeDetailActivity extends AppCompatActivity {
 
-    public static final String STEP_DETAIL_PORTRAIT_FRAGMENT = "stepDetailPortraitFragment";
     private final RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
     private final StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
     RecipeDetailViewModel recipeDetailViewModel;
-    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +81,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
-        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        boolean mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -102,14 +101,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void makeTabletFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.detail_steps_container, stepDetailFragment)
-                .commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.item_detail_container, RecipeDetailFragment.class, null);
+        fragmentTransaction.add(R.id.step_details_container, StepDetailFragment.class, null);
+        fragmentTransaction.commit();
     }
 
     private void makePortraitFragment() {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.item_detail_container, recipeDetailFragment, STEP_DETAIL_PORTRAIT_FRAGMENT)
+                .add(R.id.item_detail_container, recipeDetailFragment)
                 .commit();
     }
 

@@ -35,7 +35,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bakingapp.R;
@@ -79,11 +78,8 @@ public class RecipesActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-
         recipesAdapter = new RecipesAdapter(recipesList);
         RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recipesAdapter);
 

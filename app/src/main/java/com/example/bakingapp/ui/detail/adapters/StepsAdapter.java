@@ -30,6 +30,7 @@
 
 package com.example.bakingapp.ui.detail.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -42,13 +43,13 @@ import com.example.bakingapp.model.Steps;
 import java.util.List;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
+    static int row_index = -1;
     ItemStepBinding itemStepBinding;
-    List<Steps> steps;
-    int position;
+    List<Steps> stepsList;
     OnStepClickListener mClickListener;
 
-    public StepsAdapter(List<Steps> steps, OnStepClickListener onStepClickListener) {
-        this.steps = steps;
+    public StepsAdapter(List<Steps> stepsList, OnStepClickListener onStepClickListener) {
+        this.stepsList = stepsList;
         this.mClickListener = onStepClickListener;
     }
 
@@ -61,21 +62,26 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
     @Override
     public void onBindViewHolder(@NonNull StepsViewHolder holder, int position) {
-        Steps currentSteps = steps.get(position);
+        Steps currentSteps = stepsList.get(position);
         holder.bind(currentSteps, mClickListener);
+        if (row_index == position) {
+            holder.itemStepBinding.getRoot().setBackgroundColor(Color.parseColor("#FF6200EE"));
+            holder.itemStepBinding.stepShortDescription.setTextColor(Color.YELLOW);
+
+        } else {
+            holder.itemStepBinding.getRoot().setBackgroundColor(Color.parseColor("#F6C487"));
+            holder.itemStepBinding.stepShortDescription.setTextColor(Color.BLACK);
+        }
+        itemStepBinding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return steps == null ? 0 : steps.size();
+        return stepsList == null ? 0 : stepsList.size();
     }
 
-//    public int getStepAdapterPosition() {
-//        return itemStepBinding.getPosition();
-//    }
-
     public void setStepsData(List<Steps> stepsData) {
-        steps = stepsData;
+        stepsList = stepsData;
         notifyDataSetChanged();
     }
 
@@ -83,7 +89,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         void onStepClick(Steps steps);
     }
 
-    public static class StepsViewHolder extends RecyclerView.ViewHolder {
+    public class StepsViewHolder extends RecyclerView.ViewHolder {
 
         ItemStepBinding itemStepBinding;
 
@@ -93,10 +99,22 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         }
 
         public void bind(Steps steps, OnStepClickListener mClickListener) {
+
             itemStepBinding.stepShortDescription.setText(steps.getShortDescription());
             itemStepBinding.setStep(steps);
-            itemStepBinding.setStepItemClick(mClickListener);
+            itemStepBinding.getRoot().setOnClickListener(v -> {
+                changeBackgroundColor();
+                mClickListener.onStepClick(steps);
+            });
             itemStepBinding.executePendingBindings();
+        }
+
+        public void changeBackgroundColor() {
+            int position = getAdapterPosition();
+            int copyOfRowIndex = row_index;
+            row_index = position;
+            notifyItemChanged(copyOfRowIndex);
+            notifyItemChanged(row_index);
         }
     }
 }
