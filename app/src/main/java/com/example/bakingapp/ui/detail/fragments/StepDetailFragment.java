@@ -94,7 +94,16 @@ public class StepDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Timber.tag(Constants.TAG).d("StepDetailFragment: onCreate() called ..............");
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
+        currentStep = mViewModel.getStepsList().get(0);
+        Timber.tag(Constants.TAG).d("StepDetailFragment: onCreate() called currentStep :%s", currentStep.getDescription());
+        if (!mTwoPane) {
+            customBackNavigation();
+        }
+    }
+
+    private void customBackNavigation() {
         // https://developer.android.com/guide/navigation/navigation-custom-back
         // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -131,15 +140,19 @@ public class StepDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+
+
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        initializeVariables(mViewModel.getCurrentStep().getValue());
+        initializeVariables(currentStep);
         observeCurrentStep();
     }
 
     private void observeCurrentStep() {
         mViewModel.getCurrentStep().observe(getViewLifecycleOwner(), steps -> {
+            Timber.tag(Constants.TAG).d("StepDetailFragment: observeCurrentStep() called with currentStep = [%s]", currentStep);
+            if (mTwoPane) {
+                stopPlayer();
+            }
             initializeVariables(steps);
             releasePlayer();
             initializePlayer();
@@ -155,7 +168,15 @@ public class StepDetailFragment extends Fragment {
             playerView = fragmentStepDetailBinding.exoPlayerView;
             placeholder = fragmentStepDetailBinding.placeholder;
         } else if (mTwoPane) {
-
+            currentStepList = mViewModel.getStepsList();
+            currentStep = steps;
+            Timber.tag(Constants.TAG).d(String.format("StepDetailFragment: initializeVariables() called with: steps = [%s] , currentStep = [%s]", steps, currentStep));
+            playerView = fragmentStepDetailBinding.exoPlayerView;
+            placeholder = fragmentStepDetailBinding.placeholder;
+            TextView stepDescription = fragmentStepDetailBinding.stepDescription;
+            String currentStepDescription = currentStep.getDescription();
+            assert stepDescription != null;
+            stepDescription.setText(currentStepDescription);
         } else {
             currentStepList = mViewModel.getStepsList();
             currentStep = steps;
@@ -210,8 +231,10 @@ public class StepDetailFragment extends Fragment {
     private void initializePlayer() {
         String uri = currentStep.getVideoURL();
         if (TextUtils.isEmpty(uri)) {
+            // TODO don't forget to uncomment back hidePlayer();
             hidePlayer();
         } else {
+            // TODO don't forget to uncomment back showPlayer();
             showPlayer();
             player = new SimpleExoPlayer.Builder(requireActivity()).build();
             playerView.setPlayer(player);

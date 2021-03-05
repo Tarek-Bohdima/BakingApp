@@ -132,13 +132,12 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
 
     @Override
     public void onStepClick(Steps steps) {
-        StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
         mViewModel.getCurrentStep().setValue(steps);
         if (mTwoPane) {
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_steps_container, stepDetailFragment)
-                    .commit();
+            mViewModel.getCurrentStep().setValue(steps);
+
         } else {
+            StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.item_detail_container, stepDetailFragment)
