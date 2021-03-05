@@ -38,16 +38,11 @@
             name="step"
             type="com.example.bakingapp.model.Steps" />
 
-        <variable
-            name="stepItemClick"
-            type="com.example.bakingapp.ui.detail.adapters.StepsAdapter.OnStepClickListener" />
-
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{() -> stepItemClick.onStepClick(step)}">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/step_short_description"

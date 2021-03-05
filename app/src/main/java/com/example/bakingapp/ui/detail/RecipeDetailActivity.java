@@ -63,7 +63,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private final StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
     RecipeDetailViewModel recipeDetailViewModel;
-    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +81,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
-        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        boolean mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity

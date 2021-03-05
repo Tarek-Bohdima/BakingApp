@@ -98,7 +98,6 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         ingredientsAdapter.setIngredientsData(currentRecipe.getIngredients());
         setupStepsRecyclerView();
         stepsAdapter.setStepsData(stepsData);
-
     }
 
     private void setupViewModel() {
@@ -116,7 +115,6 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
         stepsRecyclerView.setLayoutManager(layoutManager);
         stepsRecyclerView.setHasFixedSize(true);
         stepsRecyclerView.setAdapter(stepsAdapter);
-
     }
 
     private void setupIngredientsRecyclerView() {
@@ -133,10 +131,8 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     @Override
     public void onStepClick(Steps steps) {
         mViewModel.getCurrentStep().setValue(steps);
-        if (mTwoPane) {
-            mViewModel.getCurrentStep().setValue(steps);
 
-        } else {
+        if (!mTwoPane) {
             StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
