@@ -231,10 +231,8 @@ public class StepDetailFragment extends Fragment {
     private void initializePlayer() {
         String uri = currentStep.getVideoURL();
         if (TextUtils.isEmpty(uri)) {
-            // TODO don't forget to uncomment back hidePlayer();
             hidePlayer();
         } else {
-            // TODO don't forget to uncomment back showPlayer();
             showPlayer();
             player = new SimpleExoPlayer.Builder(requireActivity()).build();
             playerView.setPlayer(player);
