@@ -30,81 +30,68 @@
 
 package com.example.bakingapp.ui.list.adapters;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bakingapp.Constants;
-import com.example.bakingapp.R;
+import com.example.bakingapp.databinding.ItemRecipeBinding;
 import com.example.bakingapp.model.Recipes;
-import com.example.bakingapp.ui.detail.RecipeDetailActivity;
-import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Locale;
-
-import timber.log.Timber;
 
 public class RecipesAdapter
         extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
 
-    private final View.OnClickListener mOnClickListener = RecipesAdapter::onClick;
-    private List<Recipes> recipes;
+    OnRecipeClickListener onRecipeClickListener;
+    private List<Recipes> recipesList;
 
-    public RecipesAdapter(List<Recipes> recipes) {
-        this.recipes = recipes;
-    }
-
-    private static void onClick(View v) {
-        Recipes currentRecipe = (Recipes) v.getTag();
-        Context context = v.getContext();
-        Intent intent = new Intent(context, RecipeDetailActivity.class);
-        intent.putExtra(RecipeDetailFragment.CURRENT_RECIPE, currentRecipe);
-        context.startActivity(intent);
+    public RecipesAdapter(OnRecipeClickListener onRecipeClickListener, List<Recipes> recipesList) {
+        this.onRecipeClickListener = onRecipeClickListener;
+        this.recipesList = recipesList;
     }
 
     public void setData(List<Recipes> recipesData) {
-        recipes = recipesData;
+        recipesList = recipesData;
         notifyDataSetChanged();
     }
 
     @Override
-    public @NotNull ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_recipe, parent, false);
-        return new ViewHolder(view);
+    public @NotNull ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+        ItemRecipeBinding itemRecipeBinding = ItemRecipeBinding
+                .inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(itemRecipeBinding);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mIdView.setText(recipes.get(position).getName());
-        Timber.tag(Constants.TAG).d(String.format(Locale.ENGLISH,
-                "RecipesAdapter: onBindViewHolder() called with: recipe's name = [%s]"
-                , recipes.get(position).getName()));
-
-        holder.itemView.setTag(recipes.get(position));
-        holder.itemView.setOnClickListener(mOnClickListener);
+        Recipes currentRecipe = recipesList.get(position);
+        holder.bind(currentRecipe, onRecipeClickListener);
     }
-
 
     @Override
     public int getItemCount() {
-        return recipes.size();
+        return recipesList == null ? 0 : recipesList.size();
+    }
+
+    public interface OnRecipeClickListener {
+        void onRecipeClick(Recipes recipe);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView mIdView;
+        ItemRecipeBinding itemRecipeBinding;
 
-        ViewHolder(View view) {
-            super(view);
-            mIdView = view.findViewById(R.id.recipe_name);
+        ViewHolder(ItemRecipeBinding itemRecipeBinding) {
+            super(itemRecipeBinding.getRoot());
+            this.itemRecipeBinding = itemRecipeBinding;
+        }
+
+        public void bind(Recipes recipe, OnRecipeClickListener onRecipeClickListener) {
+            itemRecipeBinding.setRecipe(recipe);
+            itemRecipeBinding.getRoot().setOnClickListener(v -> onRecipeClickListener.onRecipeClick(recipe));
+            itemRecipeBinding.executePendingBindings();
         }
     }
 }

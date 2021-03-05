@@ -1,4 +1,4 @@
-/*
+ /*
  * MIT License
  * Copyright (c) 2021.
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -109,7 +109,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             itemStepBinding.executePendingBindings();
         }
 
-        public void changeBackgroundColor() {
+        private void changeBackgroundColor() {
             int position = getAdapterPosition();
             int copyOfRowIndex = row_index;
             row_index = position;

@@ -49,12 +49,6 @@ public class Ingredients implements Parcelable {
     private String measure;
     private String ingredient;
 
-    public Ingredients(Double quantity, String measure, String ingredient) {
-        this.quantity = quantity;
-        this.measure = measure;
-        this.ingredient = ingredient;
-    }
-
     protected Ingredients(Parcel in) {
         quantity = in.readDouble();
         measure = in.readString();

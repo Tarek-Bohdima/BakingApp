@@ -30,6 +30,7 @@
 
 package com.example.bakingapp.ui.list;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,7 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipesListBinding;
 import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.ui.detail.RecipeDetailActivity;
+import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.list.adapters.RecipesAdapter;
 import com.example.bakingapp.ui.list.viewmodels.RecipeViewModel;
 
@@ -56,7 +58,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * item details. On tablets.
  */
 @AndroidEntryPoint
-public class RecipesActivity extends AppCompatActivity {
+public class RecipesActivity extends AppCompatActivity implements RecipesAdapter.OnRecipeClickListener {
 
     private final List<Recipes> recipesList = new ArrayList<>();
     RecipesAdapter recipesAdapter;
@@ -77,11 +79,16 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-
-        recipesAdapter = new RecipesAdapter(recipesList);
+        recipesAdapter = new RecipesAdapter(this, recipesList);
         RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recipesAdapter);
+    }
 
+    @Override
+    public void onRecipeClick(Recipes recipe) {
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailFragment.CURRENT_RECIPE, recipe);
+        startActivity(intent);
     }
 }
