@@ -45,14 +45,14 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RecipeDetailViewModel extends ViewModel {
+public class SharedlViewModel extends ViewModel {
 
     private final Recipes currentRecipe;
     private final List<Steps> stepsList;
     private MutableLiveData<Steps> currentStep;
 
     @Inject
-    public RecipeDetailViewModel(SavedStateHandle stateHandle) {
+    public SharedlViewModel(SavedStateHandle stateHandle) {
         this.currentRecipe = stateHandle.get(RecipeDetailFragment.CURRENT_RECIPE);
         assert currentRecipe != null;
         stepsList = currentRecipe.getSteps();

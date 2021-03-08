@@ -46,11 +46,11 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     static int row_index = -1;
     ItemStepBinding itemStepBinding;
     List<Steps> stepsList;
-    OnStepClickListener mClickListener;
+    OnStepClickListener listener;
 
     public StepsAdapter(List<Steps> stepsList, OnStepClickListener onStepClickListener) {
         this.stepsList = stepsList;
-        this.mClickListener = onStepClickListener;
+        this.listener = onStepClickListener;
     }
 
     @NonNull
@@ -63,7 +63,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onBindViewHolder(@NonNull StepsViewHolder holder, int position) {
         Steps currentSteps = stepsList.get(position);
-        holder.bind(currentSteps, mClickListener);
+        holder.bind(currentSteps, listener);
         if (row_index == position) {
             holder.itemStepBinding.getRoot().setBackgroundColor(Color.parseColor("#FF6200EE"));
             holder.itemStepBinding.stepShortDescription.setTextColor(Color.YELLOW);
@@ -98,13 +98,13 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             this.itemStepBinding = itemStepBinding;
         }
 
-        public void bind(Steps steps, OnStepClickListener mClickListener) {
+        public void bind(Steps steps, OnStepClickListener listener) {
 
             itemStepBinding.stepShortDescription.setText(steps.getShortDescription());
             itemStepBinding.setStep(steps);
             itemStepBinding.getRoot().setOnClickListener(v -> {
                 changeBackgroundColor();
-                mClickListener.onStepClick(steps);
+                listener.onStepClick(steps);
             });
             itemStepBinding.executePendingBindings();
         }

@@ -39,13 +39,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipeDetailBinding;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.detail.fragments.StepDetailFragment;
-import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
 import com.example.bakingapp.ui.list.RecipesActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -60,9 +58,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private final RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
-    private final StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
     public ActivityRecipeDetailBinding activityRecipeDetailBinding;
-    RecipeDetailViewModel recipeDetailViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +67,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         activityRecipeDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_detail);
         activityRecipeDetailBinding.setLifecycleOwner(this);
-        recipeDetailViewModel = new ViewModelProvider(this).get(RecipeDetailViewModel.class);
 
         Toolbar toolbar = activityRecipeDetailBinding.detailToolbar;
         setSupportActionBar(toolbar);
@@ -81,7 +77,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        boolean mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        boolean isTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -94,7 +90,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         //
         if (savedInstanceState == null) {
             makePortraitFragment();
-            if (mTwoPane) {
+            if (isTwoPane) {
                 makeTabletFragment();
             }
         }
