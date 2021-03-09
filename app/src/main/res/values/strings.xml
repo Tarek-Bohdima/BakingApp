@@ -37,7 +37,9 @@
     <string name="previous_button_text">Previous</string>
     <string name="next_button_text">Next</string>
     <string name="place_holder_image">place holder image</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
     <!-- Text for the exception message in StepDetailFragment -->
-<!--    <string name="exception_message">must implement OnStepFragmentClickListener</string>-->
+    <!--    <string name="exception_message">must implement OnStepFragmentClickListener</string>-->
 </resources>
