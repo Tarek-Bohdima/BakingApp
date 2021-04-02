@@ -54,10 +54,12 @@ public class Repository {
     private final RecipeApiService recipeApiService;
     private final MutableLiveData<List<Recipes>> recipes = new MutableLiveData<>();
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final Preferences preferences;
 
     @Inject
-    public Repository(RecipeApiService recipeApiService) {
+    public Repository(RecipeApiService recipeApiService, Preferences preferences) {
         this.recipeApiService = recipeApiService;
+        this.preferences = preferences;
     }
 
 
@@ -66,9 +68,13 @@ public class Repository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        compositeDisposable.add(recipesListSingle
-                .subscribe(recipes::postValue,
+        compositeDisposable.add(recipesListSingle.subscribe(value -> {
+                    preferences.saveRecipesToPreferences(value);
+                    preferences.setRecipesArrayList(value);
+                    recipes.postValue(value);
+                },
                         e -> Timber.tag(Constants.TAG).d("Repository: getRecipes() called with: error = [" + e.getMessage() + "]")));
+
         return recipes;
     }
 

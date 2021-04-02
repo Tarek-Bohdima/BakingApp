@@ -28,39 +28,27 @@
  * submit it, it's your own responsibility if you get expelled.
  */
 
-package com.example.bakingapp.ui.list.viewmodels;
+package com.example.bakingapp.di;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import android.content.Context;
 
-import com.example.bakingapp.model.Recipes;
-import com.example.bakingapp.repository.Repository;
+import com.example.bakingapp.repository.Preferences;
 
-import java.util.List;
+import javax.inject.Singleton;
 
-import javax.inject.Inject;
+import dagger.Module;
+import dagger.Provides;
+import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.components.SingletonComponent;
 
-import dagger.hilt.android.lifecycle.HiltViewModel;
+@Module
+@InstallIn(SingletonComponent.class)
+public class PreferencesModule {
 
-@HiltViewModel
-public class RecipeViewModel extends ViewModel {
-
-    LiveData<List<Recipes>> recipesLivedata;
-    private final Repository repository;
-
-    @Inject
-    public RecipeViewModel(Repository repository) {
-        recipesLivedata = repository.getRecipes();
-        this.repository = repository;
-    }
-
-    public LiveData<List<Recipes>> getRecipesList() {
-        return recipesLivedata;
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        repository.clearDisposables();
+    @Provides
+    @Singleton
+    Preferences providePreferences(@ApplicationContext Context context) {
+        return new Preferences(context);
     }
 }

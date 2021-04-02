@@ -41,11 +41,12 @@
         android:layout_marginBottom="8dp"
         android:text="@string/configure" />
 
-    <EditText
-        android:id="@+id/appwidget_text"
-        android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/radio_group_recipes"
+        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:orientation="vertical"/>
 
     <Button
         android:id="@+id/add_button"

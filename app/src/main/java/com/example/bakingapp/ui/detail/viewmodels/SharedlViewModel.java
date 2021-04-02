@@ -54,7 +54,7 @@ public class SharedlViewModel extends ViewModel {
     @Inject
     public SharedlViewModel(SavedStateHandle stateHandle) {
         this.currentRecipe = stateHandle.get(RecipeDetailFragment.CURRENT_RECIPE);
-        assert currentRecipe != null;
+
         stepsList = currentRecipe.getSteps();
     }
 

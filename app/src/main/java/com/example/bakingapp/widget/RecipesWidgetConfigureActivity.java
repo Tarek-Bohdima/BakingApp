@@ -1,4 +1,4 @@
-/*
+ /*
  * MIT License
  * Copyright (c) 2021.
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,41 +30,63 @@
 
 package com.example.bakingapp.widget;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 import com.example.bakingapp.R;
+import com.example.bakingapp.model.Ingredients;
+import com.example.bakingapp.model.Recipes;
+import com.example.bakingapp.repository.Preferences;
 
-/**
- * The configuration screen for the {@link RecipesWidget RecipesWidget} AppWidget.
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+ /**
+ * The configuration screen for the {@link RecipesWidgetProvider RecipesWidgetProvider} AppWidget.
  */
-public class RecipesWidgetConfigureActivity extends Activity {
+@AndroidEntryPoint
+public class RecipesWidgetConfigureActivity extends AppCompatActivity {
 
-    private static final String PREFS_NAME = "com.example.bakingapp.widget.RecipesWidget";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    EditText mAppWidgetText;
+    int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private RadioGroup radioGroup;
+
+    @Inject
+    Preferences preferences;
+
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = RecipesWidgetConfigureActivity.this;
 
             // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
+            int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+            String recipeName = ((AppCompatRadioButton) radioGroup.getChildAt(checkedRadioButtonId))
+                    .getText().toString();
+
+            preferences.saveRecipeTitle(appWidgetId, recipeName);
+            Recipes currentRecipe = preferences.getcurrentRecipe(recipeName);
+            ArrayList<Ingredients> ingredientsArrayList = currentRecipe.getIngredients();
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            RecipesWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
+            RecipesWidgetProvider.updateAppWidget(context, appWidgetManager, appWidgetId, recipeName,
+                    currentRecipe, ingredientsArrayList);
+
 
             // Make sure we pass back the original appWidgetId
             Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             setResult(RESULT_OK, resultValue);
             finish();
         }
@@ -72,31 +94,6 @@ public class RecipesWidgetConfigureActivity extends Activity {
 
     public RecipesWidgetConfigureActivity() {
         super();
-    }
-
-    // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
-        prefs.apply();
-    }
-
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
-        if (titleValue != null) {
-            return titleValue;
-        } else {
-            return context.getString(R.string.appwidget_text);
-        }
-    }
-
-    static void deleteTitlePref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId);
-        prefs.apply();
     }
 
     @Override
@@ -107,24 +104,49 @@ public class RecipesWidgetConfigureActivity extends Activity {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
 
-        setContentView(R.layout.recipes_widget_configure);
-        mAppWidgetText = (EditText) findViewById(R.id.appwidget_text);
+        setContentView(R.layout.widget_configure);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            mAppWidgetId = extras.getInt(
+            appWidgetId = extras.getInt(
                     AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
-        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
-            return;
         }
 
-        mAppWidgetText.setText(loadTitlePref(RecipesWidgetConfigureActivity.this, mAppWidgetId));
+        setupRadioGroup();
+
+//        mAppWidgetText.setText(loadTitlePref(RecipesWidgetConfigureActivity.this, mAppWidgetId));
     }
-}
+
+     private void setupRadioGroup() {
+         radioGroup = findViewById(R.id.radio_group_recipes);
+
+         List<String> recipesNames = preferences.getRecipesFromPreferences();
+
+         if (recipesNames.size() == 0) {
+             Toast.makeText(this, "No Saved Recipes", Toast.LENGTH_SHORT).show();
+             finish();
+         }
+
+         int currentRadioButtonIndex = 0;
+
+         for (String recipeName :
+                 recipesNames) {
+             AppCompatRadioButton radioButton = new AppCompatRadioButton(this);
+             radioButton.setText(recipeName);
+             radioButton.setId(currentRadioButtonIndex++);
+             radioGroup.addView(radioButton);
+         }
+
+         if (radioGroup.getChildCount() > 0) {
+             ((AppCompatRadioButton)radioGroup.getChildAt(0)).setChecked(true);
+         }
+     }
+ }

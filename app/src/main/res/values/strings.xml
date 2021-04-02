@@ -38,7 +38,7 @@
     <string name="next_button_text">Next</string>
     <string name="place_holder_image">place holder image</string>
     <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
+    <string name="configure">Choose a Recipe</string>
     <string name="add_widget">Add widget</string>
 
     <!-- Text for the exception message in StepDetailFragment -->

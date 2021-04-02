@@ -66,7 +66,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activityRecipeDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipe_detail);
+        activityRecipeDetailBinding = DataBindingUtil.setContentView(this,
+                R.layout.activity_recipe_detail);
         activityRecipeDetailBinding.setLifecycleOwner(this);
 
         Toolbar toolbar = activityRecipeDetailBinding.detailToolbar;
