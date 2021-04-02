@@ -41,6 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipesListBinding;
 import com.example.bakingapp.model.Recipes;
+import com.example.bakingapp.repository.Preferences;
 import com.example.bakingapp.ui.detail.RecipeDetailActivity;
 import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 import com.example.bakingapp.ui.list.adapters.RecipesAdapter;
@@ -48,6 +49,8 @@ import com.example.bakingapp.ui.list.viewmodels.RecipeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -60,6 +63,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class RecipesActivity extends AppCompatActivity implements RecipesAdapter.OnRecipeClickListener {
 
+    @Inject
+    Preferences preferences;
     private final List<Recipes> recipesList = new ArrayList<>();
     RecipesAdapter recipesAdapter;
     private ActivityRecipesListBinding activityItemListBinding;
@@ -75,7 +80,10 @@ public class RecipesActivity extends AppCompatActivity implements RecipesAdapter
         RecipeViewModel recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
         setupRecyclerView();
         recipeViewModel.getRecipesList().observe(this,
-                recipesData -> recipesAdapter.setData(recipesData));
+                recipesData -> {
+                    recipesAdapter.setData(recipesData);
+                    preferences.saveRecipesToPreferences(recipesData);
+                });
     }
 
     private void setupRecyclerView() {

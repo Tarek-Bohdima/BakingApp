@@ -75,7 +75,8 @@ public class RecipesWidgetConfigureActivity extends AppCompatActivity {
                     .getText().toString();
 
             preferences.saveRecipeTitle(appWidgetId, recipeName);
-            Recipes currentRecipe = preferences.getcurrentRecipe(recipeName);
+            preferences.saveCurrentRecipe(recipeName);
+            Recipes currentRecipe = preferences.getCurrentRecipe();
             ArrayList<Ingredients> ingredientsArrayList = currentRecipe.getIngredients();
 
             // It is the responsibility of the configuration activity to update the app widget

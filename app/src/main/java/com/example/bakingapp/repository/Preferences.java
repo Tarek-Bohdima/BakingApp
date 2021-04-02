@@ -35,6 +35,7 @@ import android.content.SharedPreferences;
 
 import com.example.bakingapp.Constants;
 import com.example.bakingapp.model.Recipes;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,9 +51,9 @@ public class Preferences {
     public static final String PREFS_RECIPES = "com.example.bakingapp.repository.Preferences.recipes";
     public static final String PREFS_NAME = "com.example.bakingapp.Preferences";
     public static final String PREFS_PREFIX_KEY = "appwidget_";
-    public List<Recipes> recipesList;
+    public static final String PREFERENCES_CURRENT_RECIPE = "com.example.bakingapp.repository.preferences.currentRecipe";
     private final SharedPreferences sharedPreferences;
-
+    private final List<Recipes> recipesList;
     @Inject
     public Preferences(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -77,15 +78,25 @@ public class Preferences {
         editor.apply();
     }
 
-    public Recipes getcurrentRecipe(String recipeName) {
-        Recipes currentRecipe = null;
+    public void saveCurrentRecipe(String recipeName) {
+        Timber.tag(Constants.TAG).d("Preferences: saveCurrentRecipe() called with: recipeList size = [" + recipesList.size()+ "]");
         for (int i = 0; i < recipesList.size(); i++) {
             Recipes recipe = recipesList.get(i);
             if (recipe.getName().equals(recipeName)) {
-                currentRecipe = recipe;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(recipe);
+                editor.putString(PREFERENCES_CURRENT_RECIPE,json);
+                editor.apply();
             }
         }
-        return currentRecipe;
+    }
+
+    public Recipes getCurrentRecipe(){
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(PREFERENCES_CURRENT_RECIPE, "");
+        Recipes currentRecipe = gson.fromJson(json,Recipes.class);
+        return  currentRecipe;
     }
 
     public List<String> getRecipesFromPreferences() {

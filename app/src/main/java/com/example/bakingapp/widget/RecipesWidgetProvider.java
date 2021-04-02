@@ -90,7 +90,7 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             String recipeName = preferences.getPrefsRecipeTitle(appWidgetId);
-            Recipes currentRecipe = preferences.getcurrentRecipe(recipeName);
+            Recipes currentRecipe = preferences.getCurrentRecipe();
             ArrayList<Ingredients> ingredientsArrayList = currentRecipe.getIngredients();
 
             updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, currentRecipe, ingredientsArrayList);
