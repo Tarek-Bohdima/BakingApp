@@ -70,7 +70,7 @@ public class Preferences {
         Set<String> recipesSet = new HashSet<>();
         for (Recipes recipe : recipesList) {
             recipesSet.add(recipe.getName());
-            this.recipesList.addAll(recipesList);
+            this.recipesList.add(recipe);
         }
 
         editor.putStringSet(PREFS_RECIPES,recipesSet);
