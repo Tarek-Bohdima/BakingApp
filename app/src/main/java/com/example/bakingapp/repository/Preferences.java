@@ -50,18 +50,18 @@ public class Preferences {
     public static final String PREFS_RECIPES = "com.example.bakingapp.repository.Preferences.recipes";
     public static final String PREFS_NAME = "com.example.bakingapp.Preferences";
     public static final String PREFS_PREFIX_KEY = "appwidget_";
-    private static ArrayList<Recipes> recipesArrayList = new ArrayList<>();
-
+    public List<Recipes> recipesList;
     private final SharedPreferences sharedPreferences;
 
     @Inject
     public Preferences(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        recipesList = new ArrayList<>();
     }
 
-    public static void setRecipesArrayList(List<Recipes> recipesArrayList) {
-        Preferences.recipesArrayList = new ArrayList<>(recipesArrayList);
-    }
+//    public static void setRecipesArrayList(List<Recipes> recipesArrayList) {
+//        Preferences.recipesArrayList = new ArrayList<>(recipesArrayList);
+//    }
 
     public void saveRecipesToPreferences(List<Recipes> recipesList) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -70,6 +70,7 @@ public class Preferences {
         Set<String> recipesSet = new HashSet<>();
         for (Recipes recipe : recipesList) {
             recipesSet.add(recipe.getName());
+            this.recipesList.addAll(recipesList);
         }
 
         editor.putStringSet(PREFS_RECIPES,recipesSet);
@@ -78,8 +79,8 @@ public class Preferences {
 
     public Recipes getcurrentRecipe(String recipeName) {
         Recipes currentRecipe = null;
-        for (int i = 0; i < recipesArrayList.size(); i++) {
-            Recipes recipe = recipesArrayList.get(i);
+        for (int i = 0; i < recipesList.size(); i++) {
+            Recipes recipe = recipesList.get(i);
             if (recipe.getName().equals(recipeName)) {
                 currentRecipe = recipe;
             }

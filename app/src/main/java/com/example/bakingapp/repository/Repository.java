@@ -70,7 +70,6 @@ public class Repository {
 
         compositeDisposable.add(recipesListSingle.subscribe(value -> {
                     preferences.saveRecipesToPreferences(value);
-                    preferences.setRecipesArrayList(value);
                     recipes.postValue(value);
                 },
                         e -> Timber.tag(Constants.TAG).d("Repository: getRecipes() called with: error = [" + e.getMessage() + "]")));
