@@ -28,48 +28,22 @@
  * submit it, it's your own responsibility if you get expelled.
  */
 
-package com.example.bakingapp.ui.detail.viewmodels;
+package com.example.bakingapp.ui;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
-import androidx.lifecycle.ViewModel;
+import android.widget.ImageView;
 
-import com.example.bakingapp.model.Recipes;
-import com.example.bakingapp.model.Steps;
-import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
+import androidx.databinding.BindingAdapter;
 
-import java.util.List;
+import com.bumptech.glide.Glide;
+import com.example.bakingapp.R;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.lifecycle.HiltViewModel;
-
-@HiltViewModel
-public class RecipeDetailViewModel extends ViewModel {
-
-    private final Recipes currentRecipe;
-    private final List<Steps> stepsList;
-    private MutableLiveData<Steps> currentStep;
-
-    @Inject
-    public RecipeDetailViewModel(SavedStateHandle stateHandle) {
-        this.currentRecipe = stateHandle.get(RecipeDetailFragment.CURRENT_RECIPE);
-        assert currentRecipe != null;
-        stepsList = currentRecipe.getSteps();
-    }
-
-    public Recipes getCurrentRecipe() {
-        return currentRecipe;
-    }
-
-    public List<Steps> getStepsList() {
-        return stepsList;
-    }
-
-    public MutableLiveData<Steps> getCurrentStep() {
-        if (currentStep == null) {
-            currentStep = new MutableLiveData<>();
-        }
-        return currentStep;
+public class BindingAdapters {
+    @BindingAdapter("posterUrl")
+    public static void loadImage(ImageView imageView, String url) {
+            Glide.with(imageView.getContext())
+                    .load(url)
+                    .error(R.drawable.recipes_image)
+                    .centerCrop()
+                    .into(imageView);
     }
 }

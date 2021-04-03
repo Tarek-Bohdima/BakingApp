@@ -48,12 +48,10 @@ public class RecipeViewModel extends ViewModel {
     LiveData<List<Recipes>> recipesLivedata;
     private final Repository repository;
 
-
     @Inject
     public RecipeViewModel(Repository repository) {
         recipesLivedata = repository.getRecipes();
         this.repository = repository;
-
     }
 
     public LiveData<List<Recipes>> getRecipesList() {

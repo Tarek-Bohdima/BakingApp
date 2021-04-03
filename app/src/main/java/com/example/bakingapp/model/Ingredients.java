@@ -33,6 +33,9 @@ package com.example.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ingredients implements Parcelable {
     public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
         @Override
@@ -48,17 +51,13 @@ public class Ingredients implements Parcelable {
     private Double quantity;
     private String measure;
     private String ingredient;
-
-    public Ingredients(Double quantity, String measure, String ingredient) {
-        this.quantity = quantity;
-        this.measure = measure;
-        this.ingredient = ingredient;
-    }
+    private List<Ingredients> ingredientsList = new ArrayList<>();
 
     protected Ingredients(Parcel in) {
         quantity = in.readDouble();
         measure = in.readString();
         ingredient = in.readString();
+        in.readTypedList(ingredientsList, Ingredients.CREATOR);
     }
 
     public Double getQuantity() {
@@ -95,5 +94,6 @@ public class Ingredients implements Parcelable {
         dest.writeDouble(quantity);
         dest.writeString(measure);
         dest.writeString(ingredient);
+        dest.writeTypedList(ingredientsList);
     }
 }

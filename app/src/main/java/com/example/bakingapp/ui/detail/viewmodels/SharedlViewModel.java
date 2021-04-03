@@ -28,69 +28,48 @@
  * submit it, it's your own responsibility if you get expelled.
  */
 
-package com.example.bakingapp.model;
+package com.example.bakingapp.ui.detail.viewmodels;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.ViewModel;
 
-public class Steps implements Parcelable {
+import com.example.bakingapp.model.Recipes;
+import com.example.bakingapp.model.Steps;
+import com.example.bakingapp.ui.detail.fragments.RecipeDetailFragment;
 
-    public static final Creator<Steps> CREATOR = new Creator<Steps>() {
-        @Override
-        public Steps createFromParcel(Parcel in) {
-            return new Steps(in);
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
+public class SharedlViewModel extends ViewModel {
+
+    private final Recipes currentRecipe;
+    private final List<Steps> stepsList;
+    private MutableLiveData<Steps> currentStep;
+
+    @Inject
+    public SharedlViewModel(SavedStateHandle stateHandle) {
+        this.currentRecipe = stateHandle.get(RecipeDetailFragment.CURRENT_RECIPE);
+
+        stepsList = currentRecipe.getSteps();
+    }
+
+    public Recipes getCurrentRecipe() {
+        return currentRecipe;
+    }
+
+    public List<Steps> getStepsList() {
+        return stepsList;
+    }
+
+    public MutableLiveData<Steps> getCurrentStep() {
+        if (currentStep == null) {
+            currentStep = new MutableLiveData<>();
         }
-
-        @Override
-        public Steps[] newArray(int size) {
-            return new Steps[size];
-        }
-    };
-    private final String shortDescription;
-    private final String description;
-    private final String videoURL;
-    private final String thumbnailURL;
-    private int id;
-
-    protected Steps(Parcel in) {
-        id = in.readInt();
-        shortDescription = in.readString();
-        description = in.readString();
-        videoURL = in.readString();
-        thumbnailURL = in.readString();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getVideoURL() {
-        return videoURL;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(shortDescription);
-        dest.writeString(description);
-        dest.writeString(videoURL);
-        dest.writeString(thumbnailURL);
+        return currentStep;
     }
 }

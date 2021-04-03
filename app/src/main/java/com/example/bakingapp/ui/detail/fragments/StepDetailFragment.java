@@ -53,7 +53,7 @@ import com.example.bakingapp.Constants;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.FragmentStepDetailBinding;
 import com.example.bakingapp.model.Steps;
-import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
+import com.example.bakingapp.ui.detail.viewmodels.SharedlViewModel;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -68,9 +68,9 @@ import timber.log.Timber;
 public class StepDetailFragment extends Fragment {
 
     private FragmentStepDetailBinding fragmentStepDetailBinding;
-    private boolean mTwoPane;
+    private boolean isTwoPane;
     private boolean isLandscape;
-    private RecipeDetailViewModel mViewModel;
+    private SharedlViewModel sharedlViewModel;
     private int currentStepPosition;
     private Steps currentStep;
     private PlayerView playerView;
@@ -94,11 +94,11 @@ public class StepDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mTwoPane = getResources().getBoolean(R.bool.isTablet);
-        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-        currentStep = mViewModel.getStepsList().get(0);
+        isTwoPane = getResources().getBoolean(R.bool.isTablet);
+        sharedlViewModel = new ViewModelProvider(requireActivity()).get(SharedlViewModel.class);
+        currentStep = sharedlViewModel.getStepsList().get(0);
         Timber.tag(Constants.TAG).d("StepDetailFragment: onCreate() called currentStep :%s", currentStep.getDescription());
-        if (!mTwoPane) {
+        if (!isTwoPane) {
             customBackNavigation();
         }
     }
@@ -141,16 +141,15 @@ public class StepDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         initializeVariables(currentStep);
         observeCurrentStep();
     }
 
     private void observeCurrentStep() {
-        mViewModel.getCurrentStep().observe(getViewLifecycleOwner(), steps -> {
+        sharedlViewModel.getCurrentStep().observe(getViewLifecycleOwner(), steps -> {
             Timber.tag(Constants.TAG).d("StepDetailFragment: observeCurrentStep() called with currentStep = [%s]", currentStep);
-            if (mTwoPane) {
+            if (isTwoPane) {
                 stopPlayer();
             }
             initializeVariables(steps);
@@ -161,57 +160,42 @@ public class StepDetailFragment extends Fragment {
 
     private void initializeVariables(Steps steps) {
 
-        if (isLandscape && !mTwoPane) {
-            currentStepList = mViewModel.getStepsList();
-            currentStep = steps;
-            currentStepPosition = currentStep.getId();
-            playerView = fragmentStepDetailBinding.exoPlayerView;
-            placeholder = fragmentStepDetailBinding.placeholder;
-        } else if (mTwoPane) {
-            currentStepList = mViewModel.getStepsList();
-            currentStep = steps;
-            Timber.tag(Constants.TAG).d(String.format("StepDetailFragment: initializeVariables() called with: steps = [%s] , currentStep = [%s]", steps, currentStep));
-            playerView = fragmentStepDetailBinding.exoPlayerView;
-            placeholder = fragmentStepDetailBinding.placeholder;
+        currentStepList = sharedlViewModel.getStepsList();
+        currentStep = steps;
+        currentStepPosition = currentStep.getId();
+        playerView = fragmentStepDetailBinding.exoPlayerView;
+        placeholder = fragmentStepDetailBinding.placeholder;
+        if (!isLandscape) {
             TextView stepDescription = fragmentStepDetailBinding.stepDescription;
             String currentStepDescription = currentStep.getDescription();
             assert stepDescription != null;
             stepDescription.setText(currentStepDescription);
-        } else {
-            currentStepList = mViewModel.getStepsList();
-            currentStep = steps;
-            currentStepPosition = currentStep.getId();
-            playerView = fragmentStepDetailBinding.exoPlayerView;
-            placeholder = fragmentStepDetailBinding.placeholder;
-            TextView stepDescription = fragmentStepDetailBinding.stepDescription;
             previousButton = fragmentStepDetailBinding.previousStepButton;
             nextButton = fragmentStepDetailBinding.nextStepButton;
-            String currentStepDescription = currentStep.getDescription();
-            assert stepDescription != null;
-            stepDescription.setText(currentStepDescription);
-            previousButton.setOnClickListener(this::onClick);
-            nextButton.setOnClickListener(this::onClick2);
+            assert previousButton != null;
+            previousButton.setOnClickListener(this::onPreviousClick);
+            nextButton.setOnClickListener(this::onNextClick);
         }
     }
 
-    private void onClick(View v) {
+    private void onPreviousClick(View v) {
         if (currentStepPosition > 0) {
             enableButton(nextButton);
             stopPlayer();
             Steps newStep = currentStepList.get(currentStepPosition - 1);
-            mViewModel.getCurrentStep().setValue(newStep);
+            sharedlViewModel.getCurrentStep().setValue(newStep);
         } else {
             disableButton(previousButton);
             Toast.makeText(requireActivity(), "Beginning of Steps", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void onClick2(View v) {
+    private void onNextClick(View v) {
         if (currentStepPosition < currentStepList.size() - 1) {
             enableButton(previousButton);
             stopPlayer();
             Steps newStep = currentStepList.get(currentStepPosition + 1);
-            mViewModel.getCurrentStep().setValue(newStep);
+            sharedlViewModel.getCurrentStep().setValue(newStep);
         } else {
             disableButton(nextButton);
             Toast.makeText(requireActivity(), "End of Steps", Toast.LENGTH_SHORT).show();

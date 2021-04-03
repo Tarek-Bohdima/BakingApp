@@ -28,69 +28,27 @@
  * submit it, it's your own responsibility if you get expelled.
  */
 
-package com.example.bakingapp.model;
+package com.example.bakingapp.di;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.content.Context;
 
-public class Steps implements Parcelable {
+import com.example.bakingapp.repository.Preferences;
 
-    public static final Creator<Steps> CREATOR = new Creator<Steps>() {
-        @Override
-        public Steps createFromParcel(Parcel in) {
-            return new Steps(in);
-        }
+import javax.inject.Singleton;
 
-        @Override
-        public Steps[] newArray(int size) {
-            return new Steps[size];
-        }
-    };
-    private final String shortDescription;
-    private final String description;
-    private final String videoURL;
-    private final String thumbnailURL;
-    private int id;
+import dagger.Module;
+import dagger.Provides;
+import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.components.SingletonComponent;
 
-    protected Steps(Parcel in) {
-        id = in.readInt();
-        shortDescription = in.readString();
-        description = in.readString();
-        videoURL = in.readString();
-        thumbnailURL = in.readString();
-    }
+@Module
+@InstallIn(SingletonComponent.class)
+public class PreferencesModule {
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getVideoURL() {
-        return videoURL;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(shortDescription);
-        dest.writeString(description);
-        dest.writeString(videoURL);
-        dest.writeString(thumbnailURL);
+    @Provides
+    @Singleton
+    Preferences providePreferences(@ApplicationContext Context context) {
+        return new Preferences(context);
     }
 }

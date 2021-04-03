@@ -50,7 +50,7 @@ import com.example.bakingapp.model.Recipes;
 import com.example.bakingapp.model.Steps;
 import com.example.bakingapp.ui.detail.adapters.IngredientsAdapter;
 import com.example.bakingapp.ui.detail.adapters.StepsAdapter;
-import com.example.bakingapp.ui.detail.viewmodels.RecipeDetailViewModel;
+import com.example.bakingapp.ui.detail.viewmodels.SharedlViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +64,8 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     private final List<Steps> stepsList = new ArrayList<>();
     private final List<Ingredients> ingredientsList = new ArrayList<>();
     private FragmentRecipeDetailBinding fragmentRecipeDetailBinding;
-    private RecipeDetailViewModel mViewModel;
-    private boolean mTwoPane;
+    private SharedlViewModel sharedlViewModel;
+    private boolean isTwoPane;
     private IngredientsAdapter ingredientsAdapter;
     private StepsAdapter stepsAdapter;
     private Recipes currentRecipe;
@@ -92,7 +92,7 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+        isTwoPane = getResources().getBoolean(R.bool.isTablet);
         setupViewModel();
         setupIngredientsRecyclerView();
         ingredientsAdapter.setIngredientsData(currentRecipe.getIngredients());
@@ -101,9 +101,9 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
     }
 
     private void setupViewModel() {
-        mViewModel = new ViewModelProvider(requireActivity()).get(RecipeDetailViewModel.class);
-        currentRecipe = mViewModel.getCurrentRecipe();
-        stepsData = mViewModel.getCurrentRecipe().getSteps();
+        sharedlViewModel = new ViewModelProvider(requireActivity()).get(SharedlViewModel.class);
+        currentRecipe = sharedlViewModel.getCurrentRecipe();
+        stepsData = sharedlViewModel.getCurrentRecipe().getSteps();
     }
 
     private void setupStepsRecyclerView() {
@@ -130,9 +130,9 @@ public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnSte
 
     @Override
     public void onStepClick(Steps steps) {
-        mViewModel.getCurrentStep().setValue(steps);
+        sharedlViewModel.getCurrentStep().setValue(steps);
 
-        if (!mTwoPane) {
+        if (!isTwoPane) {
             StepDetailFragment stepDetailFragment = StepDetailFragment.newInstance();
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()

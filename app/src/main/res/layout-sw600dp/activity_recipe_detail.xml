@@ -78,6 +78,12 @@
 
             </LinearLayout>
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/dividerVertical" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

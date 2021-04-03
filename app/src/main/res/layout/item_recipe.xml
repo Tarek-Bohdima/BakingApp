@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~ Copyright (c) 2021.
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,23 +34,28 @@
 
     <data>
 
-
+        <variable
+            name="recipe"
+            type="com.example.bakingapp.model.Recipes" />
     </data>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardElevation="4dp">
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            android:layout_margin="4dp"
+            android:background="#F6C487"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#F6C487"
+                android:layout_height="wrap_content"
+                android:background="#F6E5D0"
+                android:layout_margin="4dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -60,19 +64,22 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:gravity="center"
+                    android:text="@{recipe.name}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     tools:text="Recipe Name" />
 
                 <ImageView
                     android:id="@+id/recipe_image"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:layout_margin="8dp"
                     android:contentDescription="@string/recipe_image"
                     android:scaleType="centerCrop"
+                    app:posterUrl="@{recipe.image}"
                     tools:srcCompat="@tools:sample/backgrounds/scenic" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
 </layout>
