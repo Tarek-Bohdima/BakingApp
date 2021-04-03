@@ -33,6 +33,7 @@ package com.example.bakingapp.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -48,7 +49,7 @@ public class RecipeWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new RecipeWidgetItemFactory(getApplicationContext(), intent);
+        return new RecipeWidgetItemFactory(this.getApplicationContext(), intent);
     }
 
     static class RecipeWidgetItemFactory implements RemoteViewsFactory {
@@ -61,7 +62,10 @@ public class RecipeWidgetService extends RemoteViewsService {
             this.context = context;
             recipeWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-            ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
+            Bundle bundle = intent.getBundleExtra("bundle");
+            ingredientsList = bundle.getParcelableArrayList(INGREDIENTS_LIST);
+
+//            ingredientsList = intent.getParcelableArrayListExtra(INGREDIENTS_LIST);
         }
 
         @Override
@@ -82,15 +86,20 @@ public class RecipeWidgetService extends RemoteViewsService {
         @Override
         public int getCount() {
             return ingredientsList.size();
-//            return 0;
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_recipes_item);
-            views.setTextViewText(R.id.quantity_textview, ingredientsList.get(position).getQuantity().toString());
-            views.setTextViewText(R.id.measurement_unit_textview, ingredientsList.get(position).getMeasure());
-            views.setTextViewText(R.id.ingredients_textview,ingredientsList.get(position).getIngredient());
+
+            String quantity = ingredientsList.get(position).getQuantity().toString();
+            views.setTextViewText(R.id.quantity_textview_widget, quantity);
+
+            String measurementUnit = ingredientsList.get(position).getMeasure();
+            views.setTextViewText(R.id.measurement_unit_textview_widget, measurementUnit);
+
+            String ingredient = ingredientsList.get(position).getIngredient();
+            views.setTextViewText(R.id.ingredients_textview_widget, ingredient);
             return views;
         }
 

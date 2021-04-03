@@ -40,6 +40,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Choose a Recipe</string>
     <string name="add_widget">Add widget</string>
+    <string name="no_ingredients_found">No Ingredients found</string>
 
     <!-- Text for the exception message in StepDetailFragment -->
     <!--    <string name="exception_message">must implement OnStepFragmentClickListener</string>-->

@@ -48,8 +48,10 @@
                 android:value="com.example.bakingapp.ui.list.RecipesActivity" />
         </activity>
 
-        <service android:name=".widget.RecipeWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+        <service
+            android:name=".widget.RecipeWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

@@ -35,6 +35,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import com.example.bakingapp.R;
@@ -70,15 +71,23 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
 
 //        ArrayList<Ingredients> ingredientsList = currentRecipe.getIngredients();
 
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(INGREDIENTS_LIST,ingredientsArrayList);
+
         Intent serviceIntent = new Intent(context, RecipeWidgetService.class);
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetId);
-        serviceIntent.putParcelableArrayListExtra(INGREDIENTS_LIST, ingredientsArrayList);
+//        serviceIntent.putParcelableArrayListExtra(INGREDIENTS_LIST, ingredientsArrayList);
+        serviceIntent.putExtra("bundle", bundle);
+
+        // When intents are compared, the extras are ignored, so we need to embed the extras
+        // into the data so that the extras will not be ignored.
+        // https://android.googlesource.com/platform/development/+/master/samples/StackWidget/src/com/example/android/stackwidget/StackWidgetProvider.java
         serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_recipes);
-        views.setTextViewText(R.id.appwidget_text, recipeName);
         views.setRemoteAdapter(R.id.widget_list_view,serviceIntent);
+        views.setTextViewText(R.id.appwidget_text, recipeName);
         views.setEmptyView(R.id.widget_list_view,R.id.empty_text_view);
 
         // Instruct the widget manager to update the widget
@@ -91,10 +100,14 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             String recipeName = preferences.getPrefsRecipeTitle(appWidgetId);
             Recipes currentRecipe = preferences.getCurrentRecipe();
-            ArrayList<Ingredients> ingredientsArrayList = currentRecipe.getIngredients();
+            if (currentRecipe != null) {
+                ArrayList<Ingredients> ingredientsArrayList = currentRecipe.getIngredients();
 
-            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, currentRecipe, ingredientsArrayList);
+                updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, currentRecipe,
+                        ingredientsArrayList);
+            }
         }
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override

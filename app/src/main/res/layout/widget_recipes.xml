@@ -52,12 +52,14 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
 
         <ListView
             android:id="@+id/widget_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/empty_text_view"
@@ -65,7 +67,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/darker_gray"
             android:gravity="center"
-            android:text="No Ingredients found"
+            android:text="@string/no_ingredients_found"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"

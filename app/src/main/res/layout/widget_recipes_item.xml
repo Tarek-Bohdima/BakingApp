@@ -29,36 +29,40 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_margin="8dp">
 
     <TextView
+        android:id="@+id/quantity_textview_widget"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:id="@+id/quantity_textview"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        tools:text="2.5" />
+
+    <TextView
+        android:id="@+id/measurement_unit_textview_widget"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        tools:text="2.5"/>
+        android:textSize="12sp"
+        tools:text="TBLSP" />
 
     <TextView
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/measurement_unit_textview"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        tools:text="TBLSP"/>
-
-    <TextView
+        android:id="@+id/ingredients_textview_widget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredients_textview"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:textSize="12sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        tools:text="melted and cooled bittersweet or semisweet chocolate"/>
+        tools:text="melted and cooled bittersweet or semisweet chocolate" />
 
 </LinearLayout>

@@ -82,7 +82,6 @@ public class RecipesActivity extends AppCompatActivity implements RecipesAdapter
         recipeViewModel.getRecipesList().observe(this,
                 recipesData -> {
                     recipesAdapter.setData(recipesData);
-                    preferences.saveRecipesToPreferences(recipesData);
                 });
     }
 
