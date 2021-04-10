@@ -32,13 +32,18 @@ package com.example.bakingapp;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.example.bakingapp.IdlingResource.EspressoIdlingResource;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -46,11 +51,33 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class RecipeListActivtyTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.bakingapp", appContext.getPackageName());
+    }
+
+    // Register your Idling Resource before any tests regarding this component
+    @Before
+    public void registerIdlingResource() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
+    }
+
+    @Test
+    public void customComponentTest() throws Exception {
+//        CountingIdlingResource componentIdlingResource = testedComponent.getIdlingResourceInTest();
+//
+//        Espresso.registerIdlingResources(componentIdlingResource);
+        
+
+        //perform checks for the specific component below
+    }
+
+    // Unregister your Idling Resource so it can be garbage collected and does not leak any memory
+    @After
+    public void unregisterIdlingResource() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getIdlingResource());
     }
 }

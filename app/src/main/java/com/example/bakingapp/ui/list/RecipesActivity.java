@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipesListBinding;
@@ -69,6 +70,12 @@ public class RecipesActivity extends AppCompatActivity implements RecipesAdapter
     RecipesAdapter recipesAdapter;
     private ActivityRecipesListBinding activityItemListBinding;
 
+    // The Idling Resource which will be null in production.
+//    @Nullable
+//    private SimpleCountingIdlingResource mIdlingResource;
+    CountingIdlingResource mIdlingRes = new CountingIdlingResource("name");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,4 +105,20 @@ public class RecipesActivity extends AppCompatActivity implements RecipesAdapter
         intent.putExtra(RecipeDetailFragment.CURRENT_RECIPE, recipe);
         startActivity(intent);
     }
+
+    public CountingIdlingResource getIdlingResourceInTest() {
+        return mIdlingRes;
+    }
+
+//    /**
+//     * Only called from test, creates and returns a new {@link SimpleCountingIdlingResource}.
+//     */
+//    @VisibleForTesting
+//    @NonNull
+//    public IdlingResource getIdlingResource() {
+//        if (mIdlingResource == null) {
+//            mIdlingResource = new SimpleCountingIdlingResource();
+//        }
+//        return mIdlingResource;
+//    }
 }
