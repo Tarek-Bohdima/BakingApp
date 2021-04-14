@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright (c) 2021. 
+ * Copyright (c) 2021.
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -33,16 +33,27 @@ package com.example.bakingapp;
 import android.content.Context;
 
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.idling.CountingIdlingResource;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.bakingapp.IdlingResource.EspressoIdlingResource;
+import com.example.bakingapp.ui.list.RecipesActivity;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -52,6 +63,13 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class RecipeListActivtyTest {
+
+    private IdlingResource idlingResource;
+    private CountingIdlingResource countingIdlingResource;
+
+    @Rule
+    public ActivityScenarioRule<RecipesActivity> activityScenarioRule = new ActivityScenarioRule(RecipesActivity.class);
+
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -59,25 +77,26 @@ public class RecipeListActivtyTest {
         assertEquals("com.example.bakingapp", appContext.getPackageName());
     }
 
-    // Register your Idling Resource before any tests regarding this component
-    @Before
-    public void registerIdlingResource() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
-    }
-
     @Test
-    public void customComponentTest() throws Exception {
-//        CountingIdlingResource componentIdlingResource = testedComponent.getIdlingResourceInTest();
-//
-//        Espresso.registerIdlingResources(componentIdlingResource);
-        
+    public void verifyRecipeslistDisplay() {
 
-        //perform checks for the specific component below
+        onView(withId(R.id.included_layout))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.ingredients_recyclerview))
+                .check(matches(isDisplayed()));
     }
 
-    // Unregister your Idling Resource so it can be garbage collected and does not leak any memory
+    @Before
+    public void setup() {
+        idlingResource = EspressoIdlingResource.countingIdlingResource;
+        IdlingRegistry.getInstance().register(idlingResource);
+    }
+
     @After
-    public void unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getIdlingResource());
+    public void tearDown() {
+        if (idlingResource != null) {
+            IdlingRegistry.getInstance().unregister(idlingResource);
+        }
     }
 }

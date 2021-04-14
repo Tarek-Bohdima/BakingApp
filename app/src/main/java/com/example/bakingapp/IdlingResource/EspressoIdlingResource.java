@@ -30,8 +30,6 @@
 
 package com.example.bakingapp.IdlingResource;
 
-import androidx.test.espresso.IdlingResource;
-
 /**
  * Contains a static reference IdlingResource, and should be available only in a mock build type.
  */
@@ -39,18 +37,16 @@ public class EspressoIdlingResource {
 
     private static final String RESOURCE = "GLOBAL";
 
-    private static SimpleCountingIdlingResource mCountingIdlingResource =
+    public static SimpleCountingIdlingResource countingIdlingResource =
             new SimpleCountingIdlingResource(RESOURCE);
 
     public static void increment() {
-        mCountingIdlingResource.increment();
+        countingIdlingResource.increment();
     }
 
     public static void decrement() {
-        mCountingIdlingResource.decrement();
-    }
-
-    public static IdlingResource getIdlingResource() {
-        return mCountingIdlingResource;
+        if (!countingIdlingResource.isIdleNow()) {
+            countingIdlingResource.decrement();
+        }
     }
 }
