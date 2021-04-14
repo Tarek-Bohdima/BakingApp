@@ -38,6 +38,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bakingapp.IdlingResource.EspressoIdlingResource;
 import com.example.bakingapp.R;
 import com.example.bakingapp.databinding.ActivityRecipesListBinding;
 import com.example.bakingapp.model.Recipes;
@@ -82,10 +83,12 @@ public class RecipesActivity extends AppCompatActivity implements RecipesAdapter
         recipeViewModel.getRecipesList().observe(this,
                 recipesData -> {
                     recipesAdapter.setData(recipesData);
+                    EspressoIdlingResource.decrement();
                 });
     }
 
     private void setupRecyclerView() {
+        EspressoIdlingResource.increment();
         recipesAdapter = new RecipesAdapter(this, recipesList);
         RecyclerView recyclerView = activityItemListBinding.includedLayout.itemList;
         recyclerView.setHasFixedSize(true);
