@@ -54,7 +54,9 @@
             app:layout_constraintBottom_toTopOf="@+id/step_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:fastforward_increment="1000"
+            app:rewind_increment="1000"/>
 
         <ImageView
             android:id="@+id/placeholder"
