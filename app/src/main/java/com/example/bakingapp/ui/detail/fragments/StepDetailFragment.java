@@ -79,9 +79,7 @@ public class StepDetailFragment extends Fragment {
     private Button previousButton;
     private SimpleExoPlayer player;
     private ImageView placeholder;
-    private boolean playWhenReady = true;
-    private int currentWindow = 0;
-    private long playbackPosition = 0;
+    private final int currentWindow = 0;
 
     public StepDetailFragment() {
     }
@@ -222,8 +220,9 @@ public class StepDetailFragment extends Fragment {
             playerView.setPlayer(player);
             MediaItem mediaItem = MediaItem.fromUri(uri);
             player.setMediaItem(mediaItem);
-            player.setPlayWhenReady(playWhenReady);
-            player.seekTo(currentWindow, playbackPosition);
+            sharedlViewModel.getPlayerPosition().observe(getViewLifecycleOwner(), aLong -> player.seekTo(currentWindow,aLong));
+
+            sharedlViewModel.getPlayWhenReady().observe(getViewLifecycleOwner(), aBoolean -> player.setPlayWhenReady(aBoolean));
             player.prepare();
         }
     }
@@ -258,6 +257,11 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Long playerPosition = player.getCurrentPosition();
+        sharedlViewModel.savePosition(playerPosition);
+        boolean playWhenReady = player.getPlayWhenReady();
+        sharedlViewModel.savePlayWhenReady(playWhenReady);
+
         if (Util.SDK_INT < 24) {
             releasePlayer();
         }
@@ -273,9 +277,6 @@ public class StepDetailFragment extends Fragment {
 
     private void releasePlayer() {
         if (player != null) {
-            playWhenReady = player.getPlayWhenReady();
-            playbackPosition = player.getCurrentPosition();
-            currentWindow = player.getCurrentWindowIndex();
             player.release();
             player = null;
         }

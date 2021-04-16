@@ -160,6 +160,7 @@ dependencies {
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     // Annotation processor
@@ -174,6 +175,13 @@ dependencies {
 
     // Exoplayer
     implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
+
+    // Base implementation with a standard SeekBar
+    implementation 'com.github.rubensousa:previewseekbar:3.0.0'
+
+    // ExoPlayer extension that contains a TimeBar.
+    // Grab this one if you're going to integrate with ExoPlayer
+    implementation 'com.github.rubensousa:previewseekbar-exoplayer:2.11.4.0'
 
     // Fragment
     implementation "androidx.fragment:fragment:$fragment_version"
