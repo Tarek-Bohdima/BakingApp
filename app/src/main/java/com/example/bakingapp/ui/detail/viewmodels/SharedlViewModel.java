@@ -30,6 +30,7 @@
 
 package com.example.bakingapp.ui.detail.viewmodels;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
@@ -47,15 +48,35 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class SharedlViewModel extends ViewModel {
 
+    private SavedStateHandle savedStateHandle;
     private final Recipes currentRecipe;
     private final List<Steps> stepsList;
     private MutableLiveData<Steps> currentStep;
+    public static final String PLAYER_POSITION = "com.example.bakingapp.ui.detail.fragments.playerPosition";
+    public static final String PLAY_WHEN_READY = "com.example.bakinapp.ui.detail.fragments.playWhenReady";
 
     @Inject
     public SharedlViewModel(SavedStateHandle stateHandle) {
+        this.savedStateHandle = stateHandle;
         this.currentRecipe = stateHandle.get(RecipeDetailFragment.CURRENT_RECIPE);
 
         stepsList = currentRecipe.getSteps();
+    }
+
+    public LiveData<Long> getPlayerPosition() {
+        return savedStateHandle.getLiveData(PLAYER_POSITION);
+    }
+
+    public LiveData<Boolean> getPlayWhenReady() {
+        return savedStateHandle.getLiveData(PLAY_WHEN_READY);
+    }
+
+    public void savePosition(Long position) {
+        savedStateHandle.set(PLAYER_POSITION,position);
+    }
+
+    public void savePlayWhenReady(Boolean playWhenReady) {
+        savedStateHandle.set(PLAY_WHEN_READY,playWhenReady);
     }
 
     public Recipes getCurrentRecipe() {
