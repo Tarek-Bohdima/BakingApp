@@ -53,15 +53,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
 /**
  * An activity representing a list of Items. On
  * handsets, the activity presents a list of items, which when touched,
  * lead to a {@link RecipeDetailActivity} representing
  * item details. On tablets.
  */
-@AndroidEntryPoint
 public class RecipesActivity extends AppCompatActivity implements RecipesAdapter.OnRecipeClickListener {
 
     @Inject

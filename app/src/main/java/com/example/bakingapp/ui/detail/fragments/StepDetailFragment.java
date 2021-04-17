@@ -61,10 +61,8 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.List;
 
-import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
-@AndroidEntryPoint
 public class StepDetailFragment extends Fragment {
 
     private FragmentStepDetailBinding fragmentStepDetailBinding;

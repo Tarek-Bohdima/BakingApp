@@ -47,15 +47,12 @@ import com.example.bakingapp.ui.list.RecipesActivity;
 
 import java.util.Objects;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
 /**
  * An activity representing a single Item detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link RecipesActivity}.
  */
-@AndroidEntryPoint
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private final RecipeDetailFragment recipeDetailFragment = RecipeDetailFragment.newInstance();
