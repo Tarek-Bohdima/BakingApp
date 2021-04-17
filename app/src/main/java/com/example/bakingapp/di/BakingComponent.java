@@ -30,21 +30,17 @@
 
 package com.example.bakingapp.di;
 
-import android.content.Context;
-
 import com.example.bakingapp.repository.Preferences;
+import com.example.bakingapp.repository.Repository;
 
 import javax.inject.Singleton;
 
-import dagger.Module;
-import dagger.Provides;
+import dagger.Component;
 
-@Module
-public class PreferencesModule {
+@Singleton
+@Component(modules = {ContextModule.class, PreferencesModule.class, RetrofitModule.class})
+public interface BakingComponent {
 
-    @Provides
-    @Singleton
-    Preferences providePreferences( Context context) {
-        return new Preferences(context);
-    }
+    Repository getRepository();
+    Preferences getPreferences();
 }

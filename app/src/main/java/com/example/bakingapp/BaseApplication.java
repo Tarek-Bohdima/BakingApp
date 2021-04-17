@@ -32,11 +32,17 @@ package com.example.bakingapp;
 
 import android.app.Application;
 
-import dagger.hilt.android.HiltAndroidApp;
+import com.example.bakingapp.di.BakingComponent;
+import com.example.bakingapp.di.ContextModule;
+import com.example.bakingapp.di.DaggerBakingComponent;
+import com.example.bakingapp.di.PreferencesModule;
+import com.example.bakingapp.di.RetrofitModule;
+
 import timber.log.Timber;
 
-@HiltAndroidApp
 public class BaseApplication  extends Application {
+
+    private BakingComponent bakingComponent;
 
     @Override
     public void onCreate() {
@@ -44,5 +50,15 @@ public class BaseApplication  extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        bakingComponent = DaggerBakingComponent.builder()
+                .contextModule(new ContextModule(this))
+                .retrofitModule(new RetrofitModule())
+                .preferencesModule(new PreferencesModule())
+                .build();
+    }
+
+    public BakingComponent getBakingComponent() {
+        return bakingComponent;
     }
 }

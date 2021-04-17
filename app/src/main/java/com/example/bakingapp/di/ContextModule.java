@@ -32,19 +32,23 @@ package com.example.bakingapp.di;
 
 import android.content.Context;
 
-import com.example.bakingapp.repository.Preferences;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class PreferencesModule {
+public class ContextModule {
+
+    private final Context context;
+
+    public ContextModule(Context context) {
+        this.context = context;
+    }
 
     @Provides
     @Singleton
-    Preferences providePreferences( Context context) {
-        return new Preferences(context);
+    public Context provideContext() {
+        return context.getApplicationContext();
     }
 }

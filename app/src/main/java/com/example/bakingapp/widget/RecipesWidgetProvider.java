@@ -38,6 +38,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
+import com.example.bakingapp.BaseApplication;
 import com.example.bakingapp.R;
 import com.example.bakingapp.model.Ingredients;
 import com.example.bakingapp.model.Recipes;
@@ -47,36 +48,27 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link RecipesWidgetConfigureActivity RecipesWidgetConfigureActivity}
  */
-@AndroidEntryPoint
 public class RecipesWidgetProvider extends AppWidgetProvider {
 
     public static final String INGREDIENTS_LIST = "INGREDIENTS_LIST";
     @Inject
     Preferences preferences;
 
+
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, String recipeName, Recipes currentRecipe,
                                 ArrayList<Ingredients> ingredientsArrayList) {
-
-//        Intent intent = new Intent(context, RecipeDetailActivity.class);
-//        intent.putExtra(RecipeDetailFragment.CURRENT_RECIPE, currentRecipe);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-//                intent, 0);
-
-//        ArrayList<Ingredients> ingredientsList = currentRecipe.getIngredients();
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(INGREDIENTS_LIST,ingredientsArrayList);
 
         Intent serviceIntent = new Intent(context, RecipeWidgetService.class);
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetId);
-//        serviceIntent.putParcelableArrayListExtra(INGREDIENTS_LIST, ingredientsArrayList);
         serviceIntent.putExtra("bundle", bundle);
 
         // When intents are compared, the extras are ignored, so we need to embed the extras
@@ -97,6 +89,8 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
+
+        preferences = ((BaseApplication) context.getApplicationContext()).getBakingComponent().getPreferences();
         for (int appWidgetId : appWidgetIds) {
             String recipeName = preferences.getPrefsRecipeTitle(appWidgetId);
             Recipes currentRecipe = preferences.getCurrentRecipe();
@@ -112,6 +106,7 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        preferences = ((BaseApplication) context.getApplicationContext()).getBakingComponent().getPreferences();
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
             preferences.deleteTitlePrefs(appWidgetId);

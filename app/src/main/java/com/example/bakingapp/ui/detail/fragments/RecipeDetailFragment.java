@@ -55,9 +55,6 @@ import com.example.bakingapp.ui.detail.viewmodels.SharedlViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
-@AndroidEntryPoint
 public class RecipeDetailFragment extends Fragment implements StepsAdapter.OnStepClickListener {
 
     public static final String CURRENT_RECIPE = "current_recipe";

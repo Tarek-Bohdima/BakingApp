@@ -41,6 +41,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
+import com.example.bakingapp.BaseApplication;
 import com.example.bakingapp.R;
 import com.example.bakingapp.model.Ingredients;
 import com.example.bakingapp.model.Recipes;
@@ -51,12 +52,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
  /**
  * The configuration screen for the {@link RecipesWidgetProvider RecipesWidgetProvider} AppWidget.
  */
-@AndroidEntryPoint
 public class RecipesWidgetConfigureActivity extends AppCompatActivity {
 
     int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -101,6 +99,7 @@ public class RecipesWidgetConfigureActivity extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
+        preferences = ((BaseApplication) getApplication()).getBakingComponent().getPreferences();
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
