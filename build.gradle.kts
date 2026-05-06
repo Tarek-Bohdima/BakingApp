@@ -21,7 +21,7 @@ spotless {
                 "continuation_indent_size" to "4",
                 "max_line_length" to "120",
                 "ktlint_standard_filename" to "disabled",
-            )
+            ),
         )
         trimTrailingWhitespace()
         endWithNewline()
