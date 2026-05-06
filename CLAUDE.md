@@ -105,6 +105,7 @@ All of the following have been written and the project **compiles and assembles 
 **Not yet done** (next tasks):
 - GitHub repository creation + issue board setup
 - `CHANGELOG.md`
+- Professional `README.md` (project overview, screenshots/GIFs, tech-stack table, architecture diagram, build/run instructions, CI status + coverage badges, Play Store link once published)
 - Widget end-to-end test on a real device/emulator
 - Instrumented UI tests (Compose test)
 - ProGuard rules for Retrofit/Serialization
