@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Baking App</string>
+    <string name="widget_description">Shows the ingredient list for your selected recipe</string>
+</resources>

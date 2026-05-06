@@ -1,0 +1,65 @@
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+Icon?
+
+# ── Android Studio / IntelliJ IDEA ────────────────────────────────────────────
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+# Keep: .idea/runConfigurations if the team shares run configs — remove this
+# line if you do NOT share them.
+!.idea/runConfigurations/
+
+# ── Gradle ────────────────────────────────────────────────────────────────────
+.gradle/
+build/
+# Never ignore the wrapper — it must be committed so CI can bootstrap Gradle
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+gradle-app.setting
+.gradletasknamecache
+
+# ── Android local config (contains SDK path — machine-specific) ───────────────
+local.properties
+
+# ── Signing keystores — NEVER commit ─────────────────────────────────────────
+*.jks
+*.keystore
+
+# ── Google services config — contains API keys, never commit ─────────────────
+google-services.json
+
+# ── Room schema exports (committed intentionally for migration audit) ──────────
+# app/schemas/  ← intentionally NOT ignored
+
+# ── Build outputs ─────────────────────────────────────────────────────────────
+/captures/
+.externalNativeBuild/
+.cxx/
+*.ap_
+*.dex
+
+# ── Code coverage ─────────────────────────────────────────────────────────────
+*.exec
+*.ec
+
+# ── Kotlin incremental compilation cache ──────────────────────────────────────
+kotlin/
+
+# ── ProGuard mapping (optional: commit if you need crash de-obfuscation) ──────
+# mapping.txt
+
+# ── Claude Code local settings (per-developer; shared settings.json is committed) ──
+.claude/settings.local.json
+.claude/.credentials.json
+
+# ── Course assignment brief (not part of the codebase) ────────────────────────
+Capstone_Stage1.pdf
