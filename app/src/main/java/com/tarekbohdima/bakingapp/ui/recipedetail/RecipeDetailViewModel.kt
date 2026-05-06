@@ -14,18 +14,19 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class RecipeDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    repository: RecipeRepository,
-) : ViewModel() {
+class RecipeDetailViewModel @Inject constructor(savedStateHandle: SavedStateHandle, repository: RecipeRepository) :
+    ViewModel() {
 
     private val route = savedStateHandle.toRoute<RecipeDetail>()
 
     val uiState: StateFlow<RecipeDetailUiState> =
         repository.observeRecipe(route.recipeId)
             .map { recipe ->
-                if (recipe != null) RecipeDetailUiState.Success(recipe)
-                else RecipeDetailUiState.NotFound
+                if (recipe != null) {
+                    RecipeDetailUiState.Success(recipe)
+                } else {
+                    RecipeDetailUiState.NotFound
+                }
             }
             .stateIn(
                 scope = viewModelScope,

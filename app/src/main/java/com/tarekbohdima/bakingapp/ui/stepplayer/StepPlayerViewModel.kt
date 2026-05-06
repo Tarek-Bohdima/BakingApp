@@ -17,10 +17,8 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class StepPlayerViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    repository: RecipeRepository,
-) : ViewModel() {
+class StepPlayerViewModel @Inject constructor(savedStateHandle: SavedStateHandle, repository: RecipeRepository) :
+    ViewModel() {
 
     private val route = savedStateHandle.toRoute<StepPlayer>()
     private val currentIndex = MutableStateFlow(route.stepIndex)
@@ -32,12 +30,16 @@ class StepPlayerViewModel @Inject constructor(
         ) { steps, index ->
             StepPlayerUiState.Success(steps = steps, currentIndex = index.coerceIn(0, steps.lastIndex))
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = StepPlayerUiState.Loading,
-        )
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = StepPlayerUiState.Loading,
+            )
 
-    fun goToPrevious() { currentIndex.value = (currentIndex.value - 1).coerceAtLeast(0) }
-    fun goToNext(stepCount: Int) { currentIndex.value = (currentIndex.value + 1).coerceAtMost(stepCount - 1) }
+    fun goToPrevious() {
+        currentIndex.value = (currentIndex.value - 1).coerceAtLeast(0)
+    }
+    fun goToNext(stepCount: Int) {
+        currentIndex.value = (currentIndex.value + 1).coerceAtMost(stepCount - 1)
+    }
 }
