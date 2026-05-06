@@ -9,9 +9,8 @@ Read it fully before writing any code or making any suggestions.
 ## What This Project Is
 
 A **portfolio Android app** called "Baking App" built to impress recruiters.
-It is a **complete greenfield rewrite** in modern Kotlin — there is a historical Java project at
-`/Users/tarekbohdima/StudioProjects/Capstone-Project/` but it must **never** be referenced or
-copied from. Every file here was written from scratch.
+It is a **complete greenfield rewrite** in modern Kotlin. Every file here was written from scratch —
+there is no legacy code to reference or copy from.
 
 **Package name**: `com.tarekbohdima.bakingapp`
 
