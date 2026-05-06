@@ -37,10 +37,7 @@ import com.tarekbohdima.bakingapp.domain.model.Recipe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeListScreen(
-    onRecipeClick: (Int) -> Unit,
-    viewModel: RecipeListViewModel = hiltViewModel(),
-) {
+fun RecipeListScreen(onRecipeClick: (Int) -> Unit, viewModel: RecipeListViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -69,11 +66,7 @@ fun RecipeListScreen(
 }
 
 @Composable
-private fun RecipeGrid(
-    recipes: List<Recipe>,
-    onRecipeClick: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-) {
+private fun RecipeGrid(recipes: List<Recipe>, onRecipeClick: (Int) -> Unit, modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp),
         contentPadding = PaddingValues(12.dp),

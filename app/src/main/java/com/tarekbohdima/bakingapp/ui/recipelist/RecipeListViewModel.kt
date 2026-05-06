@@ -13,9 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecipeListViewModel @Inject constructor(
-    private val repository: RecipeRepository,
-) : ViewModel() {
+class RecipeListViewModel @Inject constructor(private val repository: RecipeRepository) : ViewModel() {
 
     val uiState: StateFlow<RecipeListUiState> =
         repository.observeRecipes()

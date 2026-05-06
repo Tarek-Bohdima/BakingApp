@@ -16,18 +16,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RecipeRepositoryImpl @Inject constructor(
-    private val api: BakingApiService,
-    private val dao: RecipeDao,
-) : RecipeRepository {
+class RecipeRepositoryImpl @Inject constructor(private val api: BakingApiService, private val dao: RecipeDao) :
+    RecipeRepository {
 
-    override fun observeRecipes(): Flow<List<Recipe>> =
-        dao.observeAllRecipes()
-            .onStart { if (dao.count() == 0) refreshRecipes() }
-            .map { list -> list.map { it.toDomain() } }
+    override fun observeRecipes(): Flow<List<Recipe>> = dao.observeAllRecipes()
+        .onStart { if (dao.count() == 0) refreshRecipes() }
+        .map { list -> list.map { it.toDomain() } }
 
-    override fun observeRecipe(id: Int): Flow<Recipe?> =
-        dao.observeRecipe(id).map { it?.toDomain() }
+    override fun observeRecipe(id: Int): Flow<Recipe?> = dao.observeRecipe(id).map { it?.toDomain() }
 
     override suspend fun refreshRecipes() {
         val recipes = mutableListOf<RecipeEntity>()

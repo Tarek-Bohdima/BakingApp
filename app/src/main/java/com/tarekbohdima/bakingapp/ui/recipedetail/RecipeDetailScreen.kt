@@ -2,7 +2,6 @@ package com.tarekbohdima.bakingapp.ui.recipedetail
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -69,7 +68,10 @@ fun RecipeDetailScreen(
         ) {
             when (val state = uiState) {
                 is RecipeDetailUiState.Loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-                is RecipeDetailUiState.NotFound -> Text("Recipe not found.", modifier = Modifier.align(Alignment.Center))
+                is RecipeDetailUiState.NotFound -> Text(
+                    "Recipe not found.",
+                    modifier = Modifier.align(Alignment.Center),
+                )
                 is RecipeDetailUiState.Success -> AdaptiveDetailLayout(
                     recipe = state.recipe,
                     onStepClick = onStepClick,
@@ -188,5 +190,4 @@ private fun StepRow(step: Step, isSelected: Boolean, onClick: () -> Unit) {
     Divider()
 }
 
-private fun Double.toDisplayString(): String =
-    if (this == kotlin.math.floor(this)) toLong().toString() else toString()
+private fun Double.toDisplayString(): String = if (this == kotlin.math.floor(this)) toLong().toString() else toString()

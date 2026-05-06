@@ -42,10 +42,7 @@ import com.tarekbohdima.bakingapp.domain.model.Step
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StepPlayerScreen(
-    onBack: () -> Unit,
-    viewModel: StepPlayerViewModel = hiltViewModel(),
-) {
+fun StepPlayerScreen(onBack: () -> Unit, viewModel: StepPlayerViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -142,12 +139,7 @@ private fun VideoPlayer(videoUrl: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun NavigationRow(
-    hasPrevious: Boolean,
-    hasNext: Boolean,
-    onPrevious: () -> Unit,
-    onNext: () -> Unit,
-) {
+private fun NavigationRow(hasPrevious: Boolean, hasNext: Boolean, onPrevious: () -> Unit, onNext: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

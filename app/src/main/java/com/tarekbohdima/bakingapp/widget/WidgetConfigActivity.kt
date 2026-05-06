@@ -99,7 +99,9 @@ private fun ConfigScreen(uiState: RecipeListUiState, onRecipeSelected: (Recipe) 
                 items(uiState.recipes, key = { it.id }) { recipe ->
                     ListItem(
                         headlineContent = { Text(recipe.name) },
-                        supportingContent = { Text("Serves ${recipe.servings}", style = MaterialTheme.typography.labelMedium) },
+                        supportingContent = {
+                            Text("Serves ${recipe.servings}", style = MaterialTheme.typography.labelMedium)
+                        },
                         modifier = Modifier.clickable { onRecipeSelected(recipe) },
                     )
                 }

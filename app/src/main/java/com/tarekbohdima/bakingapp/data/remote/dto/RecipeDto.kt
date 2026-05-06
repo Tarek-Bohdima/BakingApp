@@ -17,11 +17,7 @@ data class RecipeDto(
 )
 
 @Serializable
-data class IngredientDto(
-    val quantity: Double,
-    val measure: String,
-    val ingredient: String,
-)
+data class IngredientDto(val quantity: Double, val measure: String, val ingredient: String)
 
 @Serializable
 data class StepDto(
