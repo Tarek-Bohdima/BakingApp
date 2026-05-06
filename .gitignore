@@ -17,6 +17,8 @@ out/
 # Keep: .idea/runConfigurations if the team shares run configs — remove this
 # line if you do NOT share them.
 !.idea/runConfigurations/
+# Kotlin compiler daemon session files (Kotlin 2.x)
+.kotlin/
 
 # ── Gradle ────────────────────────────────────────────────────────────────────
 .gradle/
