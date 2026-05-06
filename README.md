@@ -28,12 +28,19 @@ Material 3 + Hilt + Coroutines/StateFlow + Media3 + Glance).
 
 ## Screenshots
 
-> Drop captured PNGs into `docs/screenshots/` with the filenames below and they
-> will render here.
+| Recipe list | Recipe detail (phone) | Step player (portrait) |
+|---|---|---|
+| ![](docs/screenshots/recipe_list.png) | ![](docs/screenshots/recipe_detail_phone.png) | ![](docs/screenshots/step_player.png) |
 
-| Recipe list | Recipe detail (phone) | Recipe detail (tablet) | Step player | Home-screen widget |
-|---|---|---|---|---|
-| ![](docs/screenshots/recipe_list.png) | ![](docs/screenshots/recipe_detail_phone.png) | ![](docs/screenshots/recipe_detail_tablet.png) | ![](docs/screenshots/step_player.png) | ![](docs/screenshots/widget.png) |
+**Landscape — adaptive two-pane and immersive video:**
+
+| Recipe detail (landscape, two-pane) | Step player (landscape) |
+|---|---|
+| ![](docs/screenshots/recipe_detail_tablet.png) | ![](docs/screenshots/step_player_landscape.png) |
+
+**Home-screen widget:**
+
+![](docs/screenshots/widget.png)
 
 ## Features
 
