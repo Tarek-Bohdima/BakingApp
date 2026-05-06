@@ -10,6 +10,7 @@ screen as a Glance widget.
 [![AGP](https://img.shields.io/badge/AGP-8.9.1-3DDC84?logo=android&logoColor=white)](https://developer.android.com/build/releases/gradle-plugin)
 [![minSdk](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)](https://apilevels.com/)
 [![Compose BOM](https://img.shields.io/badge/Compose%20BOM-2024.12.01-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
@@ -208,8 +209,7 @@ retention).
 
 ## License
 
-TODO — pick a license (suggested: MIT or Apache-2.0) and add a `LICENSE` file at
-the repo root.
+Released under the [MIT License](LICENSE) — © 2026 Tarek Bohdima.
 
 ## Author
 
