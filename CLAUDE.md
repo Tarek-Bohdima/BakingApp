@@ -338,8 +338,11 @@ Pipeline file: `.github/workflows/ci.yml`
 **On every push / PR:**
 Spotless → Detekt → unit tests → Kover coverage → `assembleDebug` → upload APK artifact (7-day retention)
 
-**On push to `main` only:**
-`bundleRelease` → upload AAB artifact (30-day retention)
+**On version-tag push (`v*`) only:**
+`bundleRelease` → upload AAB artifact (30-day retention). Triggered by the
+documented release flow (`git tag v1.0.0 && git push origin v1.0.0`).
+Requires the keystore secrets below to be set; until then the job is
+inert.
 
 **GitHub repository secrets required:**
 | Secret | Purpose |
