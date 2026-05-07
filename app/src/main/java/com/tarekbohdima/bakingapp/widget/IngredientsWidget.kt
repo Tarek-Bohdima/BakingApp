@@ -10,7 +10,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
-import androidx.glance.LocalContext
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
@@ -44,7 +43,6 @@ class IngredientsWidget : GlanceAppWidget() {
 
 @Composable
 private fun WidgetContent() {
-    val context = LocalContext.current
     val prefs = currentState<Preferences>()
     val recipeName = prefs[PREF_RECIPE_NAME] ?: "Tap to select a recipe"
     val ingredientsRaw = prefs[PREF_INGREDIENTS] ?: ""
